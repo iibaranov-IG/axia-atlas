@@ -1,0 +1,1021 @@
+
+  <html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta content="The Qt Multimedia module provides APIs for playing back and recording audiovisual content" name="description"/>
+  <title>Qt Multimedia 6.8.8</title>
+<link rel="canonical" href="https://doc.qt.io/qt-6/qtmultimedia-index.html" />
+  <link rel="stylesheet" type="text/css" href="/style/online2.css" />
+  <link rel="stylesheet" href="https://www.qt.io/hubfs/qt-design-system/qt-design-system-1.1.0.css" />
+  <link rel="stylesheet" type="text/css" href="/style/font-awesome.min.css" />
+  <link href="images/htmltabs.css" rel="stylesheet" type="text/css"/>
+  <link rel="shortcut icon" href="//d33sqmjvzgs8hq.cloudfront.net/wp-content/themes/oneqt/assets/images/favicon.ico.gzip" />
+  <link rel="icon" type="image/png" href="//d33sqmjvzgs8hq.cloudfront.net/wp-content/themes/oneqt/assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" href="//d33sqmjvzgs8hq.cloudfront.net/wp-content/themes/oneqt/assets/images/favicon-16x16.png" />
+  <script type="text/javascript" src="//d33sqmjvzgs8hq.cloudfront.net/wp-includes/js/jquery/jquery.js.gzip"></script>
+  <script type="text/javascript" src="//d33sqmjvzgs8hq.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js.gzip"></script>
+  <script type="text/javascript" src="//d33sqmjvzgs8hq.cloudfront.net/wp-content/themes/oneqt/js/combo.js.gzip"></script>
+  <script type="text/javascript" src="/scripts/popper.min.js"></script>
+  <script type="text/javascript" src="/scripts/tippy.min.js"></script>
+  <script type="text/javascript" src="/scripts/qtds-extras.js"></script>
+  <script type="text/javascript"> wpThemeFolder = 'https://qt.io/wp-content/themes/oneqt'; </script>
+  <script type="text/javascript">
+ $(document).ready(function(){
+   $("input[type=radio]").on("click", function() {
+   var lbl = $(this).next().text();
+   $("input[type=radio]:not(checked)").filter(function() {
+     if ($(this).next().text() == lbl)
+         $(this).prop("checked", true);
+   });
+   });
+ });
+  </script>
+  <script type="text/javascript">
+    $(function () {
+      if (document.documentElement.getAttribute('data-theme') === 'dark')
+        $('input#th-toggle').prop('checked', true);
+      $('input#th-toggle').change(function() {
+        var theme = this.checked ? 'dark' : 'light';
+        localStorage.setItem('theme', theme);
+        document.documentElement.setAttribute('data-theme', theme);
+      });
+    });
+  </script>
+  <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5QQXBTC');</script>
+  <!-- End Google Tag Manager -->
+  <script type="text/javascript" src="/scripts/qt-design-system-1.1.0-doc.js"></script>
+  <script src="/scripts/prettify.js" type="text/javascript"></script>
+</head>
+<body class="qt-design-system" style="background:var(--content-bg-color)" onload="prettyPrint()">
+<div class="qds-page-header" id="qds-page-header">
+<header class="b-header" data-float="true">
+    <div class="b-header__container">
+
+        <div class="b-header__secondary-level">
+            <div class="b-header__secondary-level__back">
+                <a class="c-link c-link--left" href="https://www.qt.io/">Back to Qt.io</a>
+            </div>
+            <div class="b-header__secondary-level__right">
+                <a href="https://www.qt.io/contact-us/" target="_blank">Contact Us</a>
+                <a href="https://blog.qt.io/" target="_blank">Blog</a>
+                <a href="https://www.qt.io/download/" target="_blank" class="c-button c-button--small">Download Q&#116;</a>
+            </div>
+        </div>
+
+        <div class="b-header__primary-level">
+            <div class="b-header__primary-level__left">
+                <a class="b-header__logo" href="/">
+                    <img src="/style/qt-logo-documentation.png" srcset="/style/qt-logo-documentation.png 1x, /style/qt-logo-documentation-2x.png 2x" alt="Qt documentation">
+                </a>
+            </div>
+            <div class="b-header__primary-level__navigation">
+            <ul class="c-navigation-header">
+                <li id="qds-trans" role="menu" class="has-children" style="display: none; margin: 0 20px 5px 0;top:7px">
+                <div class="lang-icon theme-icon"><a></a></div>
+                    <ul id="qds-trans-ul">
+                        <li class="tr-lang active" data-lang="en"><a>English</a></li>
+                    </ul>
+                </li>
+                <li role="menu" style="margin: 0 5px 5px 0;top:7px">
+                  <div title="Toggle light/dark theme" class="theme-switch-wrapper">
+                    <label class="theme-switch" for="th-toggle">
+                        <input type="checkbox" id="th-toggle" />
+                        <div class="theme-icon"></div>
+                    </label>
+                  </div>
+                </li>
+                <li role="menu">
+                    <a href="https://www.qt.io/academy" aria-haspopup="true" aria-expanded="false">Qt Academy</a>
+                </li>
+                <li role="menu">
+                    <a href="/archives" aria-haspopup="true" aria-expanded="false">Archives</a>
+                </li>
+                <li role="menu">
+                    <a href="https://doc-snapshots.qt.io/" aria-haspopup="true" aria-expanded="false">Snapshots</a>
+                </li>
+            </ul>
+            </div>
+            <div class="b-header__primary-level__hamburger">
+                <div class="c-hamburger"></div>
+            </div>
+        </div>
+    </div>
+</header>
+</div>
+<div data-global-resource-path="qt-design-system/components/b-sidebar.html">
+    <div class="b-sidebar b-sidebar--full-width">
+        <aside class="b-sidebar__sidebar">
+            <div id="qds-sbhandle"></div>
+            <div class="b-sidebar__sidebar__mobile-close"><div class="c-mobile-close"></div></div>
+            <div class="b-sidebar__sidebar__mobile-toggle" data-mobile-title="Topics"></div>
+                        <div class="b-sidebar__sidebar__content">
+                <div data-margin-bottom="md">
+                                        <select id="qds-vdropdown" class="c-form-select c-form-select--dark js-versioncontrol" style="visibility:hidden">
+                                            </select>
+                                    </div>
+                <div id="qds-ec-toggle" title="Expand/collapse all"></div>
+                <nav>
+                    <ul class="c-sidebar-navigation">
+                                                <li class="sidebar-nav-topic" id="sb-topic-0" style="visibility:hidden">
+ <a>
+  Reference
+ </a>
+ <ul>
+  <li>
+   <a href="classes.html">
+    All Qt C++ Classes
+   </a>
+  </li>
+  <li>
+   <a href="qmltypes.html">
+    All QML Types
+   </a>
+  </li>
+  <li>
+   <a href="qtmodules.html">
+    All Qt Modules
+   </a>
+  </li>
+  <li>
+   <a href="reference-overview.html">
+    All Qt Reference Pages
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-1" style="visibility:hidden">
+ <a>
+  Overview
+ </a>
+ <ul>
+  <li>
+   <a href="qt-intro.html">
+    Introduction to Qt
+   </a>
+  </li>
+  <li>
+   <a href="whatsnewqt6.html">
+    What's new in Qt 6
+   </a>
+  </li>
+  <li>
+   <a href="supported-platforms.html">
+    Supported Platforms
+   </a>
+  </li>
+  <li>
+   <a href="licensing.html">
+    Qt Licensing
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-2" style="visibility:hidden">
+ <a>
+  Getting Started
+ </a>
+ <ul>
+  <li>
+   <a href="gettingstarted.html">
+    Getting Started
+   </a>
+  </li>
+  <li>
+   <a href="get-and-install-qt.html">
+    Get and Install Qt
+   </a>
+  </li>
+  <li>
+   <a href="create-your-first-applications.html">
+    Create Your First Applications
+   </a>
+  </li>
+  <li>
+   <a href="qtexamplesandtutorials.html">
+    Examples and Tutorials
+   </a>
+  </li>
+  <li>
+   <a href="explore-qt.html">
+    Explore Qt
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-3" style="visibility:hidden">
+ <a>
+  Development Tools
+ </a>
+ <ul>
+  <li>
+   <a href="topics-app-development.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="topics-ui.html">
+    UI Frameworks
+   </a>
+  </li>
+  <li>
+   <a href="/qtcreator/index.html">
+    Qt Creator
+   </a>
+  </li>
+  <li>
+   <a href="/qtdesignstudio/index.html">
+    Qt Design Studio
+   </a>
+  </li>
+  <li>
+   <a href="qtdesigner-manual.html">
+    Qt Widgets Designer
+   </a>
+  </li>
+  <li>
+   <a href="internationalization.html">
+    Internationalization
+   </a>
+  </li>
+  <li>
+   <a href="qthelp-framework.html">
+    Qt Help Framework
+   </a>
+  </li>
+  <li>
+   <a href="cmake-manual.html">
+    Build with CMake
+   </a>
+  </li>
+  <li>
+   <a href="qmake-manual.html">
+    Build with qmake
+   </a>
+  </li>
+  <li>
+   <a href="testing-and-debugging.html">
+    Testing and Debugging
+   </a>
+  </li>
+  <li>
+   <a href="qdoc-index.html">
+    QDoc
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-4" style="visibility:hidden">
+ <a>
+  Qt Fundamentals
+ </a>
+ <ul>
+  <li>
+   <a href="topics-core.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="object.html">
+    Object Model
+   </a>
+  </li>
+  <li>
+   <a href="objecttrees.html">
+    Object Trees &amp; Ownership
+   </a>
+  </li>
+  <li>
+   <a href="metaobjects.html">
+    The Meta-Object System
+   </a>
+  </li>
+  <li>
+   <a href="properties.html">
+    The Property System
+   </a>
+  </li>
+  <li>
+   <a href="eventsandfilters.html">
+    The Event System
+   </a>
+  </li>
+  <li>
+   <a href="signalsandslots.html">
+    Signals &amp; Slots
+   </a>
+  </li>
+  <li>
+   <a href="timers.html">
+    Timers
+   </a>
+  </li>
+  <li>
+   <a href="threads.html">
+    Thread Support
+   </a>
+  </li>
+  <li>
+   <a href="containers.html">
+    Container Classes
+   </a>
+  </li>
+  <li>
+   <a href="resources.html">
+    Resource System
+   </a>
+  </li>
+  <li>
+   <a href="permissions.html">
+    Application Permissions
+   </a>
+  </li>
+  <li>
+   <a href="qpa.html">
+    Qt Platform Abstraction
+   </a>
+  </li>
+  <li>
+   <a href="platform-integration.html">
+    Platform Integration
+   </a>
+  </li>
+  <li>
+   <a href="cpp20-overview.html">
+    C++20 Overview
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-5" style="visibility:hidden">
+ <a>
+  Building UIs with Qt Quick
+ </a>
+ <ul>
+  <li>
+   <a href="qmlapplications.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="qmlfirststeps.html">
+    First Steps with QML
+   </a>
+  </li>
+  <li>
+   <a href="qmlreference.html">
+    The QML Reference
+   </a>
+  </li>
+  <li>
+   <a href="qtqml-tooling.html">
+    Qt Qml Tooling
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-index.html">
+    Qt Quick
+   </a>
+  </li>
+  <li>
+   <a href="qtquicklayouts-index.html">
+    Qt Quick - Layouts
+   </a>
+  </li>
+  <li>
+   <a href="scalability.html">
+    Qt Quick - Scalability
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-positioning-righttoleft.html">
+    Right-to-left User Interfaces
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-performance.html">
+    Qt Quick - Performance
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-debugging.html">
+    Qt Quick - Debugging
+   </a>
+  </li>
+  <li>
+   <a href="qtquicktest-index.html">
+    Qt Quick - Testing
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-deployment.html">
+    Qt Quick - Deploying
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-bestpractices.html">
+    Qt Quick - Best Practices
+   </a>
+  </li>
+  <li>
+   <a href="qtquickcontrols-index.html">
+    Qt Quick Controls
+   </a>
+  </li>
+  <li>
+   <a href="qtlabsplatform-index.html">
+    Qt Labs Platform
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-6" style="visibility:hidden">
+ <a>
+  Building UIs with Qt Widgets
+ </a>
+ <ul>
+  <li>
+   <a href="qtwidgets-index.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="widget-classes.html">
+    Widgets Classes
+   </a>
+  </li>
+  <li>
+   <a href="animation.html">
+    Animation Framework
+   </a>
+  </li>
+  <li>
+   <a href="mainwindow.html">
+    Application Main Window
+   </a>
+  </li>
+  <li>
+   <a href="dialogs.html">
+    Dialog Windows
+   </a>
+  </li>
+  <li>
+   <a href="dnd.html">
+    Drag and Drop
+   </a>
+  </li>
+  <li>
+   <a href="gestures-overview.html">
+    Gestures and Graphics View
+   </a>
+  </li>
+  <li>
+   <a href="layout.html">
+    Layout Management
+   </a>
+  </li>
+  <li>
+   <a href="application-windows.html">
+    Window and Dialog Widgets
+   </a>
+  </li>
+  <li>
+   <a href="style-reference.html">
+    Styles and Style Aware Widgets
+   </a>
+  </li>
+  <li>
+   <a href="model-view-programming.html">
+    Model/View Programming
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-7" style="visibility:hidden">
+ <a>
+  Data Input Output
+ </a>
+ <ul>
+  <li>
+   <a href="topics-data-io.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="io.html">
+    Input/Output and Networking
+   </a>
+  </li>
+  <li>
+   <a href="io-functions.html">
+    File and Datastream Functions
+   </a>
+  </li>
+  <li>
+   <a href="qtserialization.html">
+    Data Serialization
+   </a>
+  </li>
+  <li>
+   <a href="cbor.html">
+    CBOR Support
+   </a>
+  </li>
+  <li>
+   <a href="json.html">
+    JSON Support
+   </a>
+  </li>
+  <li>
+   <a href="qtxml-index.html">
+    XML Support
+   </a>
+  </li>
+  <li>
+   <a href="sql-programming.html">
+    SQL Programming
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-localstorage-qmlmodule.html">
+    Qt Quick Local Storage
+   </a>
+  </li>
+  <li>
+   <a href="implicit-sharing.html">
+    Implicit Sharing
+   </a>
+  </li>
+  <li>
+   <a href="datastreamformat.html">
+    Serializing Qt Data Types
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-8" style="visibility:hidden">
+ <a>
+  Network and Connectivity
+ </a>
+ <ul>
+  <li>
+   <a href="topics-network-connectivity.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="qtnetwork-programming.html">
+    Network Programming
+   </a>
+  </li>
+  <li>
+   <a href="ssl.html">
+    Secure Sockets Layer (SSL) Classes
+   </a>
+  </li>
+  <li>
+   <a href="qtnetworkauth-index.html">
+    Qt Network Authorization
+   </a>
+  </li>
+  <li>
+   <a href="qtremoteobjects-index.html">
+    Qt Remote Objects
+   </a>
+  </li>
+  <li>
+   <a href="qtmqtt-index.html">
+    Qt MQTT
+   </a>
+  </li>
+  <li>
+   <a href="qtopcua-index.html">
+    Qt OPC UA
+   </a>
+  </li>
+  <li>
+   <a href="qtwebsockets-index.html">
+    Qt WebSockets
+   </a>
+  </li>
+  <li>
+   <a href="qtwebchannel-index.html">
+    Qt WebChannel
+   </a>
+  </li>
+  <li>
+   <a href="qtprotobuf-index.html">
+    Qt Protobuf
+   </a>
+  </li>
+  <li>
+   <a href="qtgrpc-index.html">
+    Qt GRPC
+   </a>
+  </li>
+  <li>
+   <a href="qtserialport-index.html">
+    Qt Serial Port
+   </a>
+  </li>
+  <li>
+   <a href="qtmodbus-backends.html">
+    Qt Modbus
+   </a>
+  </li>
+  <li>
+   <a href="qtcanbus-backends.html">
+    Qt CAN Bus
+   </a>
+  </li>
+  <li>
+   <a href="qtbluetooth-index.html">
+    Qt Bluetooth
+   </a>
+  </li>
+  <li>
+   <a href="qtnfc-index.html">
+    Qt NFC
+   </a>
+  </li>
+  <li>
+   <a href="ipc.html">
+    Inter-Process Communication
+   </a>
+  </li>
+  <li>
+   <a href="qtdbus-index.html">
+    Qt D-Bus
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-9" style="visibility:hidden">
+ <a>
+  Graphics and Printing
+ </a>
+ <ul>
+  <li>
+   <a href="topics-graphics.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-visualcanvas-scenegraph.html">
+    Graphics in Qt Quick
+   </a>
+  </li>
+  <li>
+   <a href="qtquick3d-index.html">
+    3D Graphics with Qt Quick 3D
+   </a>
+  </li>
+  <li>
+   <a href="qtshadertools-index.html">
+    Shader Tools
+   </a>
+  </li>
+  <li>
+   <a href="qtgui-overview.html">
+    Graphics with Qt GUI
+   </a>
+  </li>
+  <li>
+   <a href="paintsystem.html">
+    Qt GUI Paint System
+   </a>
+  </li>
+  <li>
+   <a href="coordsys.html">
+    Qt GUI Coordinate System
+   </a>
+  </li>
+  <li>
+   <a href="paintsystem-drawing.html">
+    Qt GUI Drawing and Filling
+   </a>
+  </li>
+  <li>
+   <a href="qtopengl-index.html">
+    OpenGL Support
+   </a>
+  </li>
+  <li>
+   <a href="qtprintsupport-index.html">
+    Printing
+   </a>
+  </li>
+  <li>
+   <a href="paintsystem-images.html">
+    Reading and Writing Image Files
+   </a>
+  </li>
+  <li>
+   <a href="highdpi.html">
+    High DPI
+   </a>
+  </li>
+ </ul>
+</li>
+                        <li class="sidebar-nav-topic" id="sb-topic-10" style="visibility:hidden">
+ <a>
+  Mobile Development
+ </a>
+ <ul>
+  <li>
+   <a href="mobiledevelopment.html">
+    Overview
+   </a>
+  </li>
+  <li>
+   <a href="android.html">
+    Qt for Android
+   </a>
+  </li>
+  <li>
+   <a href="qtquick-for-android.html">
+    Qt Quick for Android
+   </a>
+  </li>
+  <li>
+   <a href="ios.html">
+    Qt for iOS
+   </a>
+  </li>
+ </ul>
+</li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <div class="b-sidebar__content">
+            <div class="b-sidebar__topbar" data-margin-bottom="sm">
+                <div class="b-topbar">
+                    <div class="b-topbar__search">
+                        <form id="site-search" role="search" style="width: 535px; max-width: 100%" autocomplete="off">
+                            <input accesskey="f" class="c-form-input-field c-form-input-field--search" placeholder="Search" id="search" name="search" onclick="(function(w,d,i){i.removeAttribute('on'+w.event.type);var j=d.createElement('script'),c=d.createElement('link');j.async=true;j.onload=function(){qtSearchInit(i,w.qtSearchNavigation)};j.src='//www.qt.io/hubfs/qt-design-system/qt-search-component-v2/qt-search-component-v2.js';c.rel='stylesheet';c.onload=function(){try{w.qtscs=1;qtSearchStyle(i)}catch(e){}};c.href='//www.qt.io/hubfs/qt-design-system/qt-search-component-v2/qt-search-component-v2.css';d.head.appendChild(c);d.head.appendChild(j)})(window,document,this)" required type="text">
+                            <button type="submit" style="display:none;">Search</button>
+                            <style>.js-qt-search-component{z-index:1000;}</style>
+                        </form>
+                    </div>                    <div class="b-topbar__breadcrump" translate="no">
+                        <ul class="c-breadcrump">
+                            <li><a href="index.html">Qt 6.8</a></li>
+                            <li><a>Qt Multimedia</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="b-sidebar__content__wrapper">
+                <article class="b-sidebar__content__left">
+                    <div id="qds-toc-menu">On this page</div>
+                    <div class="context mainContent" style="margin: 0;padding: 0; background: 0;">
+                    
+
+<div class="context">
+<h1 class="title">Qt Multimedia</h1>
+<!-- $$$qtmultimedia-index.html-description -->
+<div class="descr" id="details">
+<p class="centerAlign"><img alt='"image of multimedia icons, courtesy of misirlou from the Noun Project"' src="images/noun_Media_166644.svg"/></p><p>Qt Multimedia is an add-on module that provides a rich set of QML types and C++ classes to handle multimedia content. It contains an easy to use API for playing back audio and video files and rendering those on screen, as well as a comprehensive API for recording audio and video from various sources, including system cameras and microphones, screen or window captures, and audio or video memory buffers.</p>
+<p>The functionality of this module is divided into the following submodules:</p>
+<div class="table"><table class="generic">
+<tr class="odd" valign="top"><td><a href="multimediaoverview.html">Qt Multimedia</a></td><td>Provides an API for multimedia-specific use cases.</td></tr>
+<tr class="even" valign="top"><td><a href="qtmultimediawidgets-index.html">Qt Multimedia Widgets</a></td><td>Provides a widget-based multimedia API.</td></tr>
+<tr class="odd" valign="top"><td><a href="qtspatialaudio-index.html">Qt Spatial Audio</a></td><td>Provides an API for implementing sound fields in 3D space.</td></tr>
+</table></div>
+<h2 id="getting-started">Getting started<a class="plink" href="#getting-started" title="Direct link to this headline"></a></h2>
+<p>If you are porting from Qt 5 to Qt 6, see <a href="qtmultimedia-changes-qt6.html">Changes to Qt Multimedia</a>.</p>
+<p>If you are new to Qt Multimedia, the QML types can be <a href="https://doc.qt.io/qt-6/qtqml-syntax-imports.html">imported</a> into an application using the following statement in your <code translate="no">.qml</code> file.</p>
+<div class="pre"><pre class="qml prettyprint" translate="no">import QtMultimedia</pre></div>
+<p>To link against the C++ libraries, add the following to your project's <code translate="no">CMakeLists.txt</code> file. Substitute <code translate="no">my_project</code> with the name of your project.</p>
+<div class="pre"><pre class="cpp prettyprint" translate="no">find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+target_link_libraries(my_project PRIVATE Qt6<span class="operator">::</span>Multimedia)</pre></div>
+<p>See <a href="qtmultimedia-building-from-source.html">Building Qt Multimedia from sources</a> for guidance on building Qt Multimedia from sources.</p>
+<h2 id="overviews-and-important-topics">Overviews and important topics<a class="plink" href="#overviews-and-important-topics" title="Direct link to this headline"></a></h2>
+<ul>
+<li><a href="qtmultimedia-changes-qt6.html">Changes in Qt 6</a></li>
+<li><a href="multimediaoverview.html">Multimedia Overview</a></li>
+<li><a href="audiooverview.html">Audio Overview</a></li>
+<li><a href="spatialaudiooverview.html">Spatial Audio Overview</a></li>
+<li><a href="videooverview.html">Video Overview</a></li>
+<li><a href="cameraoverview.html">Camera Overview</a></li>
+<li><a href="videooverview.html#supported-media-formats">Supported Media Formats</a></li>
+</ul>
+<h2 id="qml-types">QML types<a class="plink" href="#qml-types" title="Direct link to this headline"></a></h2>
+<p>The following table outlines some important QML types.</p>
+<div class="table"><table class="generic">
+<thead><tr class="qt-style"><th>Type</th><th>Description</th></tr></thead>
+<tr class="odd" valign="top"><td><a href="qml-qtmultimedia-mediaplayer.html" translate="no">MediaPlayer</a></td><td>Add audio/video playback functionality to a scene.</td></tr>
+<tr class="even" valign="top"><td><a href="qml-qtmultimedia-capturesession.html" translate="no">CaptureSession</a></td><td>Create a session for capturing audio/video.</td></tr>
+<tr class="odd" valign="top"><td><a href="qml-qtmultimedia-camera.html" translate="no">Camera</a></td><td>Access a camera connected to the system.</td></tr>
+<tr class="even" valign="top"><td><a href="qml-qtmultimedia-audioinput.html" translate="no">AudioInput</a></td><td>Access an audio input (microphone) connected to the system.</td></tr>
+<tr class="odd" valign="top"><td><a href="qml-qtmultimedia-audiooutput.html" translate="no">AudioOutput</a></td><td>Access an audio output (speaker, headphone) connected to the system.</td></tr>
+<tr class="even" valign="top"><td><a href="qml-qtmultimedia-videooutput.html" translate="no">VideoOutput</a></td><td>Display video content.</td></tr>
+<tr class="odd" valign="top"><td><a href="qml-qtmultimedia-mediarecorder.html" translate="no">MediaRecorder</a></td><td>Record audio/video from the <a href="qml-qtmultimedia-capturesession.html" translate="no">CaptureSession</a>.</td></tr>
+<tr class="even" valign="top"><td><a href="qml-qtmultimedia-imagecapture.html" translate="no">ImageCapture</a></td><td>Capture still images from the Camera.</td></tr>
+<tr class="odd" valign="top"><td><a href="qml-qtmultimedia-video.html" translate="no">Video</a></td><td>Add Video playback functionality to a scene. Uses <a href="qml-qtmultimedia-mediaplayer.html" translate="no">MediaPlayer</a> and <a href="qml-qtmultimedia-videooutput.html" translate="no">VideoOutput</a> types to provide video playback functionality.</td></tr>
+<tr class="even" valign="top"><td><a href="qml-qtmultimedia-screencapture.html" translate="no">ScreenCapture</a></td><td>Captures a screen.</td></tr>
+<tr class="odd" valign="top"><td><a href="qml-qtmultimedia-windowcapture.html" translate="no">WindowCapture</a></td><td>Captures a top-level window.</td></tr>
+</table></div>
+<h2 id="c-classes">C++ classes<a class="plink" href="#c-classes" title="Direct link to this headline"></a></h2>
+<p>The following table outlines some important C++ classes.</p>
+<div class="table"><table class="generic">
+<thead><tr class="qt-style"><th>Class</th><th>Description</th></tr></thead>
+<tr class="odd" valign="top"><td><a href="qmediaplayer.html" translate="no">QMediaPlayer</a></td><td>Playback media from a source.</td></tr>
+<tr class="even" valign="top"><td><a href="qvideowidget.html" translate="no">QVideoWidget</a></td><td>Display video from a media player or a capture session.</td></tr>
+<tr class="odd" valign="top"><td><a href="qmediacapturesession.html" translate="no">QMediaCaptureSession</a></td><td>Capture audio and video.</td></tr>
+<tr class="even" valign="top"><td><a href="qcamera.html" translate="no">QCamera</a></td><td>Access a camera connected to the system</td></tr>
+<tr class="odd" valign="top"><td><a href="qaudioinput.html" translate="no">QAudioInput</a></td><td>Access an audio input (microphone) connected to the system.</td></tr>
+<tr class="even" valign="top"><td><a href="qaudiooutput.html" translate="no">QAudioOutput</a></td><td>Access an audio output (speaker, headphone) connected to the system.</td></tr>
+<tr class="odd" valign="top"><td><a href="qimagecapture.html" translate="no">QImageCapture</a></td><td>Capture still images with a camera.</td></tr>
+<tr class="even" valign="top"><td><a href="qmediarecorder.html" translate="no">QMediaRecorder</a></td><td>Record media content from a capture session.</td></tr>
+<tr class="odd" valign="top"><td><a href="qvideosink.html" translate="no">QVideoSink</a></td><td>Access and render individual video frames.</td></tr>
+<tr class="even" valign="top"><td><a href="qaudiosink.html" translate="no">QAudioSink</a></td><td>Sends raw audio data to an audio output device.</td></tr>
+<tr class="odd" valign="top"><td><a href="qscreencapture.html" translate="no">QScreenCapture</a></td><td>Captures a screen.</td></tr>
+<tr class="even" valign="top"><td><a href="qwindowcapture.html" translate="no">QWindowCapture</a></td><td>Captures a top-level window.</td></tr>
+<tr class="odd" valign="top"><td><a href="qvideoframeinput.html" translate="no">QVideoFrameInput</a></td><td>Used to display or record video frames from memory buffers.</td></tr>
+<tr class="even" valign="top"><td><a href="qaudiobufferinput.html" translate="no">QAudioBufferInput</a></td><td>Supports playing or recording audio from memory buffers.</td></tr>
+</table></div>
+<p>For playback of audio and video, <a href="qmediaplayer.html" translate="no">QMediaPlayer</a>, <a href="qaudiooutput.html" translate="no">QAudioOutput</a>, and <a href="qvideowidget.html" translate="no">QVideoWidget</a> contain all necessary functionality. Other classes are dedicated to capturing audio and video content, with <a href="qmediacapturesession.html" translate="no">QMediaCaptureSession</a> serving as the central class that manages the entire capture and recording process.</p>
+<h2 id="licenses-and-attributions">Licenses and attributions<a class="plink" href="#licenses-and-attributions" title="Direct link to this headline"></a></h2>
+<p>The Qt Multimedia module is available under commercial licenses from <a href="http://www.qt.io/about-us/">The Qt Company</a>. In addition, it is available under free software licenses. Since Qt 5.6, these free software licenses are <a href="http://www.gnu.org/licenses/lgpl-3.0.html">GNU Lesser General Public License, version 3</a>, or the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>. See <a href="licensing.html">Qt Licensing</a> for further details.</p>
+<p>Furthermore, Qt Multimedia in Qt 6.8.8 may contain third-party modules under the following permissive licenses:</p>
+<div class="table"><table class="annotated">
+<tr class="odd topAlign"><td class="tblName" translate="no"><p><a href="qtmultimedia-attribution-ffmpeg.html">FFmpeg, version 7.1.3</a></p></td><td class="tblDescr"><p>GNU Lesser General Public License v2.1 or later and BSD 3-Clause "New" or "Revised" License and BSD 2-Clause "Simplified" License and BSD Source Code Attribution and ISC License and MIT License and Mozilla Public License 2.0</p></td></tr>
+<tr class="even topAlign"><td class="tblName" translate="no"><p><a href="qtmultimedia-attribution-ffmpeg-boost.html">boost</a></p></td><td class="tblDescr"><p>Boost Software License 1.0</p></td></tr>
+<tr class="odd topAlign"><td class="tblName" translate="no"><p><a href="qtmultimedia-attribution-ffmpeg-libjpeg.html">libjpeg</a></p></td><td class="tblDescr"><p>Independent JPEG Group License</p></td></tr>
+<tr class="even topAlign"><td class="tblName" translate="no"><p><a href="qtmultimedia-attribution-ffmpeg-zlib.html">zlib</a></p></td><td class="tblDescr"><p>zlib License</p></td></tr>
+</table></div>
+<p>Note that video compression standards, such as the H.264 media compression standard, may be covered by patents and can incur royalty fees. This can apply to any implementation, also if the implementation is provided as an operating system service, through a third-party library, or any of Qt Multimedia's backends. The Qt licenses do not cover such fees.</p>
+<h2 id="target-platform-and-backend-notes">Target platform and backend notes<a class="plink" href="#target-platform-and-backend-notes" title="Direct link to this headline"></a></h2>
+<p>Qt Multimedia offers user-friendly, cross-platform APIs for media playback, recording, and device management. The implementation of core APIs, including <a href="qmediadevices.html" translate="no">QMediaDevices</a>, <a href="qaudiodevice.html" translate="no">QAudioDevice</a>, <a href="qsoundeffect.html" translate="no">QSoundEffect</a>, <a href="qaudiosink.html" translate="no">QAudioSink</a>, and <a href="qaudiosource.html" translate="no">QAudioSource</a> are integrated into the main Qt Multimedia library, eliminating the need for additional libraries. Other Qt Multimedia APIs are implemented using plugin libraries known as media backends. The main media backend, built on <a href="http://ffmpeg.org">FFmpeg</a>, ensures seamless cross-platform functionality, and is the default on all platforms except WebAssembly and embedded Linux/Boot2Qt. With Boot2Qt, the default backend is built on top of <a href="https://gstreamer.freedesktop.org/">GStreamer</a>, but the FFmpeg media backend can be enabled using the <code translate="no">QT_MEDIA_BACKEND</code> environment variable.</p>
+<h3 id="the-ffmpeg-backend">The FFmpeg backend<a class="plink" href="#the-ffmpeg-backend" title="Direct link to this headline"></a></h3>
+<p>The FFmpeg media backend relies on the <b>FFmpeg 7.1</b> libraries, which are included with the Qt Online Installer and tested by the maintainers. The binary packages from the online installer use dynamic linking to FFmpeg. Therefore, applications must either bundle FFmpeg binaries in their installer or depend on FFmpeg being installed on the operating system. The FFmpeg libraries are automatically deployed using Qt's deployment tools as described in the <a href="deployment.html">Deploying Qt Applications</a> documentation, except for <a href="linux-deployment.html">Linux/X11</a>. Applications can also deploy their own build of FFmpeg, either as shared or static libraries, provided the FFmpeg major version matches the version used by Qt.</p>
+<p>While Qt Multimedia leverages the FFmpeg media backend on most operating systems, platform specific functional or visual differences may arise between applications on different platforms. FFmpeg does not provide identical codec and format support across all platforms, and the performance of Qt Multimedia features may depend on hardware support that is only available on certain platforms. For instance, FFmpeg encounters specific issues with hardware acceleration on Linux targets with ARM architectures. Therefore, it is recommended to test Qt Multimedia applications on all target platforms.</p>
+<div class="admonition note">
+<p><b>Note: </b>The FFmpeg project provides features under various licenses. The pre-built FFmpeg libraries that are provided through the Online Installer are only including features that agree with the permissive licenses listed under <a href="qtmultimedia-index.html#licenses-and-attributions">Licenses and Attributions</a>.</p>
+</div>
+<p>To ease development and debugging, some FFmpeg functionality is configurable via <a href="advanced-ffmpeg-configuration.html">environment varibles</a> which are part of the private Qt Multimedia API.</p>
+<h3 id="native-backends">Native backends<a class="plink" href="#native-backends" title="Direct link to this headline"></a></h3>
+<p>For compatibility with existing applications, we maintain native media backends for each operating system:</p>
+<ul>
+<li><a href="qtmultimedia-gstreamer.html">GStreamer backend</a> on Embedded Linux</li>
+<li>AVFoundation on macOS and iOS</li>
+<li>Windows Media Foundation on Windows</li>
+<li>MediaCodec framework on Android</li>
+</ul>
+<div class="admonition note">
+<p><b>Note: </b>The FFmpeg media backend is the default backend, but native backends are still available but with <b>limited</b> support. The GStreamer backend is only available on Linux, and is only recommended for embedded applications.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>MediaCodec on Android is deprecated as of Qt 6.8 and will be removed in the next major release.</p>
+</div>
+<p>Qt Maintainers will strive to fix critical issues with the native backends but don't guarantee fixing minor issues, including inconsistent behavior across platforms. New features will only be implemented on the FFmpeg media backend.</p>
+<p>The GStreamer backend has some private APIs to allow more fine-grained control. However, there are known bugs in the GStreamer backend. More details can be found in <a href="qtmultimedia-gstreamer.html">platform notes for the GStreamer backend</a>.</p>
+<p>Backend limitations will be documented, and their status will be maintained in the respective classes.</p>
+<h3 id="changing-backends">Changing backends<a class="plink" href="#changing-backends" title="Direct link to this headline"></a></h3>
+<p>In the case of issues with the default FFmpeg backend, we suggest testing with a native backend. You can switch to native backends by setting the <code translate="no">QT_MEDIA_BACKEND</code> environment variable to <code translate="no">windows</code>, <code translate="no">gstreamer</code> (on Embedded Linux), <code translate="no">darwin</code> (on macOS and iOS), or <code translate="no">android</code>:</p>
+<div class="pre"><pre class="cpp" translate="no"><span class="keyword">export</span> QT_MEDIA_BACKEND<span class="operator">=</span>darwin</pre></div>
+<p>To force assign FFmpeg as the used backend, set the variable to <code translate="no">ffmpeg</code>:</p>
+<div class="pre"><pre class="cpp" translate="no"><span class="keyword">export</span> QT_MEDIA_BACKEND<span class="operator">=</span>ffmpeg</pre></div>
+<p>On the Qt Multimedia compilation stage, the default media backend can be configured via cmake variable <code translate="no">QT_DEFAULT_MEDIA_BACKEND</code>.</p>
+<h3 id="target-platform-notes">Target platform notes<a class="plink" href="#target-platform-notes" title="Direct link to this headline"></a></h3>
+<p>The following pages list issues for specific target platforms.</p>
+<ul>
+<li><a href="qtmultimedia-apple.html">macOS and iOS</a></li>
+<li><a href="qtmultimedia-wasm.html">WebAssembly</a></li>
+<li><a href="qtmultimedia-windows.html">Windows</a></li>
+<li><a href="qtmultimedia-linux.html">Linux</a></li>
+<li><a href="qtmultimedia-gstreamer.html">GStreamer backend for embedded Linux</a></li>
+</ul>
+<h2 id="permissions">Permissions<a class="plink" href="#permissions" title="Direct link to this headline"></a></h2>
+<p>Starting from Qt 6.6, the Qt Multimedia module uses the new <a href="qpermission.html" translate="no">QPermission</a> API to handle <a href="qcamerapermission.html" translate="no">camera</a> and <a href="qmicrophonepermission.html" translate="no">microphone</a> permissions. This means that Qt itself no longer queries for these permissions, so this needs to be done directly from the client application.</p>
+<p>Please refer to the <a href="permissions.html">Application Permissions</a> page for an example of how to integrate the new <a href="qpermission.html" translate="no">QPermission</a> API into the application.</p>
+<h2 id="reference-and-examples">Reference and examples<a class="plink" href="#reference-and-examples" title="Direct link to this headline"></a></h2>
+<ul>
+<li><a href="qtmultimedia-qmlmodule.html" translate="no">QML Types</a></li>
+<li><a href="qtmultimedia-modules.html">C++ Classes</a></li>
+<li><a href="multimedia-examples.html">Examples</a></li>
+</ul>
+</div>
+<!-- @@@qtmultimedia-index.html -->
+</div>
+<p class="copy-notice">
+<abbr title="Copyright">©</abbr> 2026 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.     The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.     Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+
+                    </div>
+                </article>
+                <aside class="b-sidebar__content__right">
+                    <div class="h-wysiwyg-html" data-scheme>
+                                                <h6><strong>Contents</strong></h6>
+                        <nav>
+                            <ul class="c-tableofcontents js-c-tableofcontents" data-tableofcontents-id="wrapperid" data-margin-top="sm">
+<li class="level1"><p><a href="#getting-started">Getting started</a></p></li>
+<li class="level1"><p><a href="#overviews-and-important-topics">Overviews and important topics</a></p></li>
+<li class="level1"><p><a href="#qml-types">QML types</a></p></li>
+<li class="level1"><p><a href="#c-classes">C++ classes</a></p></li>
+<li class="level1"><p><a href="#licenses-and-attributions">Licenses and attributions</a></p></li>
+<li class="level1"><p><a href="#target-platform-and-backend-notes">Target platform and backend notes</a></p></li>
+<li class="level2"><p><a href="#the-ffmpeg-backend">The FFmpeg backend</a></p></li>
+<li class="level2"><p><a href="#native-backends">Native backends</a></p></li>
+<li class="level2"><p><a href="#changing-backends">Changing backends</a></p></li>
+<li class="level2"><p><a href="#target-platform-notes">Target platform notes</a></p></li>
+<li class="level1"><p><a href="#permissions">Permissions</a></p></li>
+<li class="level1"><p><a href="#reference-and-examples">Reference and examples</a></p></li>
+</ul>
+                        </nav>
+                                            </div>
+                                    </aside>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer">
+<div class="l-footer">
+    <div class="l-footer__container">
+        <div class="l-footer__row l-footer__row--no-padding-bottom">
+            <div class="l-footer__column l-footer__company">
+                <div class="l-footer__logo">
+                    <a href="https://www.qt.io/?hsLang=en" class="c-logo-footer">
+                    <img src="/images/qtgroup.svg">
+                    </a>
+                </div>
+                <div class="c-social-media-links">
+                    <a href="https://twitter.com/qtproject" target="_blank" rel="noopener" class="fm_button fm_twitter"><span></span></a>
+                    <a href="https://www.facebook.com/qt/" target="_blank" rel="noopener" class="fm_button fm_facebook"><span></span></a>
+                    <a href="https://www.youtube.com/user/QtStudios" target="_blank" rel="noopener" class="fm_button fm_youtube"><span></span></a>
+                    <a href="https://www.linkedin.com/company/qtgroup/" target="_blank" rel="noopener" class="fm_button fm_linkedin"><span></span></a>
+                </div>
+                <div class="l-footer__contact">
+                        <a class="c-btn " href="https://www.qt.io/contact-us?hsLang=en">Contact Us</a>
+                </div>
+
+            </div>
+            <div class="l-footer__column l-footer__navigation">
+                <div class="c-footer-navigation">
+
+                        <span><div class="hs-menu-wrapper" role="navigation" aria-label="Navigation Menu">
+<ul role="menu">
+  <li class="hs-menu-item hs-menu-depth-1 hs-item-has-children" role="none"><a href="javascript:;" aria-haspopup="true" aria-expanded="false" role="menuitem">Qt Group</a>
+   <ul role="menu" class="hs-menu-children-wrapper">
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/group" role="menuitem">Our Story</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/brand" role="menuitem">Brand</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/newsroom" role="menuitem">News</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/careers" role="menuitem">Careers</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/investors" role="menuitem">Investors</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/product" role="menuitem">Qt Products</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/product/quality-assurance" role="menuitem">Software Quality Products</a></li>
+   </ul></li>
+  <li class="hs-menu-item hs-menu-depth-1 hs-item-has-children" role="none"><a href="javascript:;" aria-haspopup="true" aria-expanded="false" role="menuitem">Licensing</a>
+   <ul role="menu" class="hs-menu-children-wrapper">
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/terms-conditions" role="menuitem">License Agreement</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/licensing/open-source-lgpl-obligations" role="menuitem">Open Source</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/pricing" role="menuitem">Plans and pricing</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/download" role="menuitem">Download</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/faq/overview" role="menuitem">FAQ</a></li>
+   </ul></li>
+  <li class="hs-menu-item hs-menu-depth-1 hs-item-has-children" role="none"><a href="javascript:;" aria-haspopup="true" aria-expanded="false" role="menuitem">Learn Qt</a>
+   <ul role="menu" class="hs-menu-children-wrapper">
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/academy" role="menuitem">For Learners</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/qt-educational-license" role="menuitem">For Students and Teachers</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://doc.qt.io/" role="menuitem" target="_blank" rel="noopener">Qt Documentation</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://forum.qt.io/" role="menuitem" target="_blank" rel="noopener">Qt Forum</a></li>
+   </ul></li>
+  <li class="hs-menu-item hs-menu-depth-1 hs-item-has-children" role="none"><a href="javascript:;" aria-haspopup="true" aria-expanded="false" role="menuitem">Support &amp; Services</a>
+   <ul role="menu" class="hs-menu-children-wrapper">
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/qt-professional-services" role="menuitem">Professional Services</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/customer-success" role="menuitem">Customer Success</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/qt-support/" role="menuitem">Support Services</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/contact-us/partners" role="menuitem">Partners</a></li>
+    <li class="hs-menu-item hs-menu-depth-2" role="none"><a href="https://www.qt.io/qt-world" role="menuitem" target="_blank" rel="noopener">Qt World</a></li>
+   </ul></li>
+ </ul>
+</div></span>
+      </div>
+   </div>
+</div>
+        <div class="l-footer__row">
+            <div class="l-footer__column l-footer__legal">
+                <div class="c-footer-secondary-navigation">
+                    <span><div class="hs-menu-wrapper" role="navigation"  aria-label="Navigation Menu">
+ <ul role="menu">
+  <li class="hs-menu-item hs-menu-depth-1" role="none"><a href="javascript:;" role="menuitem">© 2026 The Qt Company</a></li>
+  <li class="hs-menu-item hs-menu-depth-1" role="none"><a href="mailto:feedback@qt.io?Subject=Feedback%20about%20doc.qt.io%20site">Feedback</a></li>
+ </ul>
+</div></span>
+                    <p class="c-footer-secondary-navigation__group-notice">Qt Group includes The Qt Company Oy and its global subsidiaries and affiliates.</p>
+                </div>
+            </div>
+            <div class="l-footer__column l-footer__some-links">
+            </div>
+        </div>
+    </div>
+</div>
+</div></body></html>

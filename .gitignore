@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+layout.ini
+state/
+build/
+dist/
+*.spec
+*.zip
+*.log
+.venv/
+site_device_groups.json
+*.mp3
+*.wav
+*.sqlite*
+*.pem

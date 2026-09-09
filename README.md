@@ -6,9 +6,11 @@ Atlas brings equipment discovery, device web interfaces, audio monitoring and re
 
 ## Publication status
 
-This repository currently contains the **project documentation preview**. Application source code and a standalone Windows build have not yet been published here. There is no downloadable application release yet.
+This repository contains the **application source, tests and build instructions** for the preview. Download the portable Windows x64 package from [Releases](https://github.com/iibaranov-IG/axia-atlas/releases).
 
-The documents describe the local development version. Implemented features, known limitations and planned work are distinguished explicitly. This is not a production-certified monitoring system, and no Telos Alliance endorsement is claimed.
+**[Quick start and build instructions](QUICKSTART.md)** · **[Administration](ADMINISTRATION.md)** · **[Third-party notices](THIRD_PARTY.md)**
+
+Implemented features, known limitations and planned work are distinguished explicitly. This is not a production-certified monitoring system, and no Telos Alliance endorsement is claimed.
 
 ## Documents
 

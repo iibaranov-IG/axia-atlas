@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0-preview.1",
+  "frozen": true,
+  "passed": true,
+  "checks": {
+    "desktop": true,
+    "dpapi_and_https_accounts": true,
+    "pdf": true,
+    "webengine": true,
+    "resampling_and_mp3": true
+  }
+}
