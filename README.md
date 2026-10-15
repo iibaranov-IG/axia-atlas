@@ -1,40 +1,41 @@
 # Axia Atlas
 
-**An independent Windows engineering workspace for Axia and Livewire environments.**
+Free, independent Windows software for broadcast engineers working with Axia Livewire networks. The interface is available in Russian and English. Atlas is not affiliated with or certified by Telos Alliance.
 
-Atlas brings equipment discovery, device web interfaces, audio monitoring and recording, events, diagnostics and documentation into one English-language desktop interface.
+**Current candidate: 0.2.0-rc.1.** This is a release candidate for supervised evaluation, not a claim of certified on-air operation.
 
-## Publication status
+[Начало работы на русском](QUICKSTART.ru.md) · [English quick start](QUICKSTART.md) · [Release notes](RELEASE_NOTES.md) · [Product description](PRODUCT.ru.md)
 
-This repository contains the **application source, tests and build instructions** for the preview. Download the portable Windows x64 package from [Releases](https://github.com/iibaranov-IG/axia-atlas/releases).
+## What Atlas does
 
-**[Quick start and build instructions](QUICKSTART.md)** · **[Administration](ADMINISTRATION.md)** · **[Third-party notices](THIRD_PARTY.md)**
+- Discovers Livewire announcements on a selected adapter and reads supported device details.
+- Shows numbered, enabled audio sources; monitors supported stereo streams and records WAV or MP3.
+- Keeps device web interfaces, PDF manuals and reference searches inside the application.
+- Maintains equipment cards, a signal map, event history, device syslog and diagnostic reports.
+- Provides multi-source health monitoring, configuration snapshots and guarded routing scenarios.
+- Keeps local shift schedules, leave and replacements.
+- Supports user permissions and reusable encrypted device credential profiles.
+- Offers optional local speech transcription and an advisory Virtual Engineer.
+- Opens ATLAS Broadcast Player as a separate application module with its own library and process.
 
-Implemented features, known limitations and planned work are distinguished explicitly. This is not a production-certified monitoring system, and no Telos Alliance endorsement is claimed.
+Network discovery, monitoring and device commands start only through explicit user actions. Fresh installations contain no station inventory, staff records, saved credentials or private knowledge base. Existing workstation data remains in the same per-user directory.
 
-## Documents
+## Scope and limits
 
-- [Full product description — Russian](PRODUCT.ru.md): what Atlas does, available workflows, users and credentials, audio formats, current limitations and roadmap.
-- [Technical preview for Telos Alliance — English](TELOS_PRESENTATION.md): the operational problem, capabilities, a proposed 15-minute demonstration, collaboration questions and an unsent introductory message.
-- [MIT license](LICENSE): license for the original project material in this repository. Third-party software and vendor materials retain their own licenses.
+Supported audio reception is the implemented Livewire/RTP PCM path, not universal AES67 certification. Configuration snapshots are not a full restore mechanism. Routing scenarios require preflight and arming; automated continuous failover and firmware installation are not included. Shared accounts do not synchronize equipment cards, shift schedules or scenarios between computers.
 
-## Product overview
+Transcription downloads its recognition files after confirmation. The Virtual Engineer needs a separately installed local service and an available profile; it does not execute device commands. Atlas works without either optional component.
 
-- **Network:** Livewire discovery, grouped inventory, source search and observation history.
-- **Audio:** channel selection, favorites, stereo monitoring, WAV/MP3 recording and recorded-file playback.
-- **Device interfaces:** embedded web pages and saved credential profiles.
-- **Events and Health:** unified application/Syslog events, selected-channel measurements and diagnostic exports.
-- **Library:** references matched to discovered equipment, internal PDF viewing and curated official downloads.
-- **Administration:** central user accounts and per-function permissions for engineering workstations.
+## Build and test
 
-## Planned work
+Windows x64 and Python 3.11 are used for this candidate. Install requirements-build.txt in a virtual environment, then run:
 
-**Scenarios**, confirmed signal paths, sustained multi-channel alarms, configuration backup and restoration, equipment records, deeper compatibility validation and deployment improvements.
+~~~powershell
+python tooling/run_desktop_tests.py
+python build_windows.py
+dist/release-candidate/AxiaAtlas/AxiaAtlas.exe --self-test state/frozen-acceptance
+~~~
 
-Scenarios are intended to be stored on a computer or server; a node is not assumed to store them. Scenario execution and firmware installation are not available features of the current preview.
+The build includes its source hashes and dependency notices. Release acceptance must use the packaged executable, not just the source tests. See RELEASE_NOTES.md for measured results and remaining gaps.
 
-## Important limitations
-
-Loss-free reception and subjective listening acceptance remain unresolved. Universal Livewire/AES67 format support is not claimed. The central account host currently runs inside the Atlas application. See the full description for operational limits.
-
-No station credentials, private inventory, operational recordings, vendor manuals or firmware binaries are included in this repository.
+Original Atlas source is MIT licensed. Dependency notices and vendor document rights remain separate: see THIRD_PARTY.md.

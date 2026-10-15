@@ -1,4 +1,5 @@
 """Curated official reference links; no claim of device compatibility or latest release."""
+from localization import tr
 from pathlib import Path
 from library_downloads import LibraryDownload, files_for
 from library_inventory import catalog_for, inventory_note
@@ -74,11 +75,10 @@ class ResourceLibrary(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         layout = QVBoxLayout(self)
-        heading = QLabel('Documentation & Firmware')
+        heading = QLabel(tr('Documentation & Firmware'))
         heading.setStyleSheet('font-size: 22px; font-weight: 600; margin: 12px;')
         layout.addWidget(heading)
-        note = QLabel(f'Official reference catalog · reviewed {REVIEWED}\n'
-            'Listed versions are published releases, not verified upgrades for your device.')
+        note = QLabel(tr('Official reference catalog · reviewed {v0}\nListed versions are published releases, not verified upgrades for your device.', v0=REVIEWED))
         note.setWordWrap(True)
         layout.addWidget(note)
         self.inventory_status = QLabel()
@@ -86,18 +86,18 @@ class ResourceLibrary(QWidget):
         layout.addWidget(self.inventory_status)
         row = QHBoxLayout()
         self.search = QLineEdit()
-        self.search.setPlaceholderText('Find a model, manual or version…')
+        self.search.setPlaceholderText(tr('Find a model, manual or version…'))
         self.kind = QComboBox()
-        self.kind.addItems(['Manuals', 'Firmware', 'Software'])
+        for value in ['Manuals', 'Firmware', 'Software']: self.kind.addItem(tr(value), value)
         self.family = QComboBox()
-        self.family.addItems(['All equipment'] + sorted({entry['family'] for entry in CATALOG}))
+        self.family.addItems([tr('All equipment')] + sorted({entry['family'] for entry in CATALOG}))
         row.addWidget(self.search, 1)
         row.addWidget(self.kind)
         layout.addLayout(row)
         layout.addWidget(self.family)
         self.table = QTreeWidget()
         self.table.setRootIsDecorated(False)
-        self.table.setHeaderLabels(['Equipment family', 'Resource', 'Version / revision'])
+        self.table.setHeaderLabels([tr('Equipment family'), tr('Resource'), tr('Version / revision')])
         self.table.setColumnWidth(0, 260)
         self.table.setColumnWidth(1, 100)
         for entry in CATALOG:
@@ -105,14 +105,14 @@ class ResourceLibrary(QWidget):
             item.setData(0, Qt.UserRole, entry)
             self.table.addTopLevelItem(item)
         layout.addWidget(self.table, 1)
-        self.details = QLabel('Select a resource to see its scope and official source.')
+        self.details = QLabel(tr('Select a resource to see its scope and official source.'))
         self.details.setWordWrap(True)
         self.details.setTextFormat(Qt.PlainText)
         self.details.setTextInteractionFlags(Qt.TextSelectableByMouse)
         layout.addWidget(self.details)
         row = QHBoxLayout()
-        self.open_button = QPushButton('Open in Atlas')
-        self.copy_button = QPushButton('Copy Link')
+        self.open_button = QPushButton(tr('Open in Atlas'))
+        self.copy_button = QPushButton(tr('Copy Link'))
         self.open_button.setEnabled(False)
         self.copy_button.setEnabled(False)
         row.addWidget(self.open_button)
@@ -130,16 +130,16 @@ class ResourceLibrary(QWidget):
         self.file_choices = QComboBox()
         layout.addWidget(self.file_choices)
         download_row = QHBoxLayout()
-        self.download_button = QPushButton('Download from Official Site')
-        self.cancel_button = QPushButton('Cancel Download')
+        self.download_button = QPushButton(tr('Download from Official Site'))
+        self.cancel_button = QPushButton(tr('Cancel Download'))
         self.cancel_button.setEnabled(False)
-        self.local_button = QPushButton('Open Downloaded File')
+        self.local_button = QPushButton(tr('Open Downloaded File'))
         self.local_button.setEnabled(False)
         download_row.addWidget(self.download_button)
         download_row.addWidget(self.cancel_button)
         download_row.addWidget(self.local_button)
         layout.addLayout(download_row)
-        self.download_status = QLabel('Select a resource to download. Firmware is saved locally; installation is separate.')
+        self.download_status = QLabel(tr('Select a resource to download. Firmware is saved locally; installation is separate.'))
         self.download_status.setWordWrap(True)
         layout.addWidget(self.download_status)
         self.download_button.clicked.connect(self.download_selected)
@@ -162,7 +162,7 @@ class ResourceLibrary(QWidget):
         previous = self.family.currentText()
         self.family.blockSignals(True)
         self.family.clear()
-        self.family.addItems(['All discovered equipment'] + sorted({e['family'] for e in entries}))
+        self.family.addItems([tr('All discovered equipment')] + sorted({e['family'] for e in entries}))
         if self.family.findText(previous) >= 0:
             self.family.setCurrentText(previous)
         self.family.blockSignals(False)
@@ -182,7 +182,7 @@ class ResourceLibrary(QWidget):
 
     def filter(self, *_):
         query = self.search.text().strip().casefold()
-        kind = self.kind.currentText()
+        kind = self.kind.currentData()
         self.table.setCurrentItem(None)
         for index in range(self.table.topLevelItemCount()):
             item = self.table.topLevelItem(index)
@@ -201,12 +201,12 @@ class ResourceLibrary(QWidget):
                     self.file_choices.addItem(entry['label'], entry)
             self.download_button.setEnabled(item is not None and self.download.reply is None and
                 getattr(self, 'permission_check', lambda _: True)('downloads'))
-            self.download_button.setText('Download from Official Site' if self.file_choices.count() else 'Open Official Download Page')
+            self.download_button.setText((tr('Download from Official Site') if self.file_choices.count() else tr('Open Official Download Page')))
         if item is None:
-            self.details.setText('Select a resource to see its scope and official source.')
+            self.details.setText(tr('Select a resource to see its scope and official source.'))
             return
         entry = item.data(0, Qt.UserRole)
-        self.details.setText(f'{entry["title"]}\n\n{entry["notes"]}\n\nSource: {entry["url"]}')
+        self.details.setText(tr('{v0}\n\n{v1}\n\nSource: {v2}', v0=entry['title'], v1=entry['notes'], v2=entry['url']))
 
     def open_page(self):
         if not getattr(self, 'permission_check', lambda _: True)('library'):
@@ -230,11 +230,11 @@ class ResourceLibrary(QWidget):
     def update_local(self, *_):
         entry = self.file_choices.currentData()
         self.local_button.setEnabled(bool(entry and self.download.path_for(entry).is_file()))
-        self.local_button.setText('Open Download Folder' if entry and entry['url'].endswith('.pkg') else 'Open Downloaded File')
+        self.local_button.setText((tr('Open Download Folder') if entry and entry['url'].endswith('.pkg') else tr('Open Downloaded File')))
 
     def download_selected(self):
         if not getattr(self, 'permission_check', lambda _: True)('downloads'):
-            self.download_status.setText('Downloads are not permitted for this account.')
+            self.download_status.setText(tr('Downloads are not permitted for this account.'))
             return
         entry = self.file_choices.currentData()
         if not entry:
@@ -247,11 +247,11 @@ class ResourceLibrary(QWidget):
         self.download.start(entry)
 
     def download_complete(self, path):
-        self.download_status.setText(f'Saved locally: {path}')
+        self.download_status.setText(tr('Saved locally: {v0}', v0=path))
         self.download_done()
 
     def download_failed(self, message):
-        self.download_status.setText(f'Download not completed: {message}')
+        self.download_status.setText(tr('Download not completed: {v0}', v0=message))
         self.download_done()
 
     def download_done(self):
@@ -272,7 +272,7 @@ class ResourceLibrary(QWidget):
                 if path.suffix.lower() == '.pdf':
                     self.open_requested.emit(QUrl.fromLocalFile(str(path.resolve())), path.name)
                 elif not QDesktopServices.openUrl(QUrl.fromLocalFile(str(path.parent))):
-                    self.download_status.setText('Could not open the download folder.')
+                    self.download_status.setText(tr('Could not open the download folder.'))
 
     def closeEvent(self, event):
         self.download.cancel()
@@ -287,10 +287,10 @@ class ResourceNavigator(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 4, 4, 4)
         self.kind = QComboBox()
-        self.kind.addItems(['Manuals', 'Firmware', 'Software'])
+        for value in ['Manuals', 'Firmware', 'Software']: self.kind.addItem(tr(value), value)
         layout.addWidget(self.kind)
         self.search = QLineEdit()
-        self.search.setPlaceholderText('Find manual, model or firmware…')
+        self.search.setPlaceholderText(tr('Find manual, model or firmware…'))
         layout.addWidget(self.search)
         self.tree = QTreeWidget()
         self.tree.setHeaderHidden(True)
@@ -341,7 +341,7 @@ class ResourceNavigator(QWidget):
             for child_index in range(root.childCount()):
                 child = root.child(child_index)
                 entry = child.data(0, Qt.UserRole)
-                child.setHidden(entry['kind'] != self.kind.currentText() or
+                child.setHidden(entry['kind'] != self.kind.currentData() or
                     query.casefold() not in ' '.join(entry.values()).casefold())
             root.setHidden(all(root.child(i).isHidden() for i in range(root.childCount())))
             if query and not root.isHidden():

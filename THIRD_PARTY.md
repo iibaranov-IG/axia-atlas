@@ -1,5 +1,16 @@
 # Third-party software and source references
 
+For 0.2.0-rc.1, the exact Python distributions are additionally pinned in
+`requirements-lock.txt`. The build copies their installed license, notice and
+copyright files into `third_party_notices/`. Added components include
+faster-whisper, CTranslate2, tokenizers, Hugging Face Hub, ONNX Runtime, PyAV
+(with its FFmpeg libraries), pypdf and fontTools. Recognition model weights are
+not bundled; they download separately after the operator confirms.
+
+Previously collected upstream Qt/GNU texts are kept offline; use
+`collect_notices.py --refresh-upstream` to retrieve them again. Installed
+dependency notices and Chromium credits are collected for each build.
+
 The MIT license covers original Atlas code. It does not replace dependency licenses or grant rights to vendor manuals, firmware or trademarks. Bundled dependency notices are in `third_party_notices/`; installed versions are recorded in its `versions.json`.
 
 Atlas uses unmodified upstream binary packages. PySide/Qt libraries are supplied as separate files in the portable `_internal` directory. They are not statically linked into Atlas. Users may replace these libraries with compatible modified versions or rebuild Atlas from source. Atlas imposes no additional restriction on debugging modifications to LGPL-covered components. Keep dependency notices when redistributing.

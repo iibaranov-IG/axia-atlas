@@ -1,4 +1,5 @@
 """Unified application/device timeline. Raw device datagrams are retained in the archive."""
+from localization import tr
 import json
 import re
 from datetime import datetime
@@ -34,39 +35,43 @@ class EventsPanel(QWidget):
         layout = QVBoxLayout(self)
         row = QHBoxLayout()
         self.origin = QComboBox()
-        self.origin.addItems(['All', 'Application', 'Devices'])
+        for value in ['All', 'Application', 'Devices']: self.origin.addItem(tr(value), value)
         self.severity = QComboBox()
-        self.severity.addItems(['All severities'] + LEVELS + ['Unknown'])
+        for value in ['All severities'] + LEVELS + ['Unknown']: self.severity.addItem(tr(value), value)
         self.search = QLineEdit()
-        self.search.setPlaceholderText('Find message or device IP…')
+        self.search.setPlaceholderText(tr('Find message or device IP…'))
         for widget in (self.origin, self.severity, self.search):
             row.addWidget(widget)
         layout.addLayout(row)
         self.tree = QTreeWidget()
         self.tree.setRootIsDecorated(False)
-        self.tree.setHeaderLabels(['Received', 'Source', 'Device IP', 'Severity', 'Message'])
+        self.tree.setHeaderLabels([tr('Received'), tr('Source'), tr('Device IP'), tr('Severity'), tr('Message')])
         for index, width in enumerate((170, 90, 120, 85, 550)):
             self.tree.setColumnWidth(index, width)
         self.tree.setSelectionMode(QTreeWidget.ExtendedSelection)
         self.tree.setUniformRowHeights(True)
         layout.addWidget(self.tree)
         row = QHBoxLayout()
-        self.auto_scroll = QCheckBox('Auto Scroll')
+        self.auto_scroll = QCheckBox(tr('Auto Scroll'))
         self.auto_scroll.setChecked(True)
-        self.pause = QCheckBox('Pause View')
-        self.archive = QCheckBox('Auto Save')
+        self.pause = QCheckBox(tr('Pause View'))
+        self.archive = QCheckBox(tr('Auto Save'))
         self.archive.setChecked(True)
-        copy = QPushButton('Copy Selected')
+        copy = QPushButton(tr('Copy Selected'))
         copy.clicked.connect(self.copy_selected)
-        export = QPushButton('Export Visible…')
+        export = QPushButton(tr('Export Visible…'))
         export.clicked.connect(self.export_visible)
-        folder = QPushButton('Open Archive')
+        folder = QPushButton(tr('Open Archive'))
         folder.clicked.connect(self.open_archive)
-        for widget in (self.auto_scroll, self.pause, self.archive, copy, export, folder):
+        for widget in (self.auto_scroll, self.pause, self.archive):
+            row.addWidget(widget)
+        layout.addLayout(row)
+        row = QHBoxLayout()
+        for widget in (copy, export, folder):
             row.addWidget(widget)
         layout.addLayout(row)
         self.address = QComboBox()
-        self.address.addItem('All local interfaces', '0.0.0.0')
+        self.address.addItem(tr('All local interfaces'), '0.0.0.0')
         for interface in QNetworkInterface.allInterfaces():
             for entry in interface.addressEntries():
                 if entry.ip().protocol() == QAbstractSocket.IPv4Protocol:
@@ -74,15 +79,15 @@ class EventsPanel(QWidget):
         self.port = QSpinBox()
         self.port.setRange(1, 65535)
         self.port.setValue(514)
-        self.start = QPushButton('Start Device Log')
+        self.start = QPushButton(tr('Start Device Log'))
         self.start.clicked.connect(self.toggle_receiver)
         row = QHBoxLayout()
-        row.addWidget(QLabel('Syslog receiver'))
+        row.addWidget(QLabel(tr('Syslog receiver')))
         row.addWidget(self.address, 1)
         row.addWidget(self.port)
         row.addWidget(self.start)
         layout.addLayout(row)
-        self.status = QLabel('Device log stopped. Application events remain available.')
+        self.status = QLabel(tr('Device log stopped. Application events remain available.'))
         self.status.setWordWrap(True)
         layout.addWidget(self.status)
         self.origin.currentTextChanged.connect(self.filter)
@@ -130,8 +135,8 @@ class EventsPanel(QWidget):
         item.setHidden(not self.matches(record))
 
     def matches(self, record):
-        return ((self.origin.currentText() == 'All' or self.origin.currentText() == record['source'])
-            and (self.severity.currentIndex() == 0 or self.severity.currentText() == record['severity'])
+        return ((self.origin.currentData() == 'All' or self.origin.currentData() == record['source'])
+            and (self.severity.currentIndex() == 0 or self.severity.currentData() == record['severity'])
             and self.search.text().casefold() in (record['message'] + ' ' + record['ip']).casefold())
 
     def filter(self, *_):
@@ -154,25 +159,25 @@ class EventsPanel(QWidget):
 
     def start_receiver(self, address, port):
         if not self.socket.bind(QHostAddress(address), port, QAbstractSocket.DontShareAddress):
-            self.status.setText(f'Could not start device log: {self.socket.errorString()}')
+            self.status.setText(tr('Could not start device log: {v0}', v0=self.socket.errorString()))
             return False
         self.received = 0
-        self.start.setText('Stop Device Log')
+        self.start.setText(tr('Stop Device Log'))
         index = self.address.findData(address)
         if index >= 0:
             self.address.setCurrentIndex(index)
         self.port.setValue(self.socket.localPort())
         self.address.setEnabled(False)
         self.port.setEnabled(False)
-        self.status.setText(f'Listening on {address}:{self.socket.localPort()} · no device messages yet')
+        self.status.setText(tr('Listening on {v0}:{v1} · no device messages yet', v0=address, v1=self.socket.localPort()))
         return True
 
     def stop_receiver(self):
         self.socket.close()
-        self.start.setText('Start Device Log')
+        self.start.setText(tr('Start Device Log'))
         self.address.setEnabled(True)
         self.port.setEnabled(True)
-        self.status.setText(f'Device log stopped · {self.received} messages received')
+        self.status.setText(tr('Device log stopped · {v0} messages received', v0=self.received))
 
     def receive(self):
         from PySide6.QtCore import QTimer
@@ -184,8 +189,7 @@ class EventsPanel(QWidget):
             record.update(source='Devices', ip=datagram.senderAddress().toString())
             self.add(record)
             self.received += 1
-        self.status.setText(f'Device log listening · {self.received} messages received' +
-                           (f' · {self.archive_error}' if self.archive_error else ''))
+        self.status.setText(tr('Device log listening · {v0} messages received', v0=self.received) + (f' · {self.archive_error}' if self.archive_error else ''))
         if self.socket.hasPendingDatagrams():
             QTimer.singleShot(0, self.receive)
 
@@ -196,7 +200,7 @@ class EventsPanel(QWidget):
     def export_visible(self):
         if not getattr(self, 'permission_check', lambda _: True)('events'):
             return
-        path, _ = QFileDialog.getSaveFileName(self, 'Export Visible Events', 'events.jsonl', 'Event archive (*.jsonl)')
+        path, _ = QFileDialog.getSaveFileName(self, tr('Export Visible Events'), 'events.jsonl', 'Event archive (*.jsonl)')
         if path:
             try:
                 with open(path, 'w', encoding='utf-8') as stream:
@@ -205,12 +209,12 @@ class EventsPanel(QWidget):
                         if not item.isHidden():
                             stream.write(json.dumps(item.data(0, Qt.UserRole), ensure_ascii=False) + '\n')
             except OSError as exc:
-                self.status.setText(f'Export failed: {exc}')
+                self.status.setText(tr('Export failed: {v0}', v0=exc))
 
     def open_archive(self):
         try:
             self.directory.mkdir(parents=True, exist_ok=True)
             if not QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.directory.resolve()))):
-                self.status.setText('Could not open archive folder.')
+                self.status.setText(tr('Could not open archive folder.'))
         except OSError as exc:
-            self.status.setText(f'Could not open archive folder: {exc}')
+            self.status.setText(tr('Could not open archive folder: {v0}', v0=exc))

@@ -1,4 +1,5 @@
 """Local recording history and playback; audio and original reports stay untouched."""
+from localization import tr
 import json
 from pathlib import Path
 
@@ -22,41 +23,41 @@ class RecordingsPanel(QWidget):
         self.media.setAudioOutput(self.output)
         layout = QVBoxLayout(self)
         heading = QHBoxLayout()
-        heading.addWidget(QLabel('Recorded files'), 1)
-        self.add_button = QPushButton('Add Files…')
+        heading.addWidget(QLabel(tr('Recorded files')), 1)
+        self.add_button = QPushButton(tr('Add Files…'))
         self.add_button.clicked.connect(self.choose_files)
         heading.addWidget(self.add_button)
-        self.refresh_button = QPushButton('Refresh')
+        self.refresh_button = QPushButton(tr('Refresh'))
         self.refresh_button.clicked.connect(self.refresh)
         heading.addWidget(self.refresh_button)
         layout.addLayout(heading)
         self.table = QTreeWidget()
         self.table.setRootIsDecorated(False)
-        self.table.setHeaderLabels(['Recording / Channel', 'Recorded', 'Duration', 'Format', 'Audio quality'])
+        self.table.setHeaderLabels([tr('Recording / Channel'), tr('Recorded'), tr('Duration'), tr('Format'), tr('Audio quality')])
         self.table.setColumnWidth(0, 260)
         self.table.setColumnWidth(1, 155)
         self.table.setColumnWidth(4, 220)
         self.table.currentItemChanged.connect(self.selection_changed)
         self.table.itemDoubleClicked.connect(lambda *_: self.play_selected())
         layout.addWidget(self.table, 1)
-        self.status = QLabel('Select a recording. Files are played locally; live monitoring stops when playback starts.')
+        self.status = QLabel(tr('Select a recording. Files are played locally; live monitoring stops when playback starts.'))
         self.status.setWordWrap(True)
         layout.addWidget(self.status)
         controls = QHBoxLayout()
-        self.play_button = QPushButton('Play Recording')
+        self.play_button = QPushButton(tr('Play Recording'))
         self.play_button.clicked.connect(self.play_selected)
-        self.stop_button = QPushButton('Stop Recording Playback')
+        self.stop_button = QPushButton(tr('Stop Recording Playback'))
         self.stop_button.clicked.connect(self.media.stop)
-        self.folder_button = QPushButton('Open Folder')
+        self.folder_button = QPushButton(tr('Open Folder'))
         self.folder_button.clicked.connect(self.open_folder)
         self.volume = QSlider(Qt.Horizontal)
         self.volume.setRange(0, 100)
         self.volume.setValue(15)
         self.volume.valueChanged.connect(lambda value: self.output.setVolume(value / 100))
-        for widget in (self.play_button, self.stop_button, self.folder_button, QLabel('Volume'), self.volume):
+        for widget in (self.play_button, self.stop_button, self.folder_button, QLabel(tr('Volume')), self.volume):
             controls.addWidget(widget)
         layout.addLayout(controls)
-        self.media.errorOccurred.connect(lambda _, message: self.status.setText(f'Cannot play recording: {message}'))
+        self.media.errorOccurred.connect(lambda _, message: self.status.setText(tr('Cannot play recording: {v0}', v0=message)))
         self.media.mediaStatusChanged.connect(self.media_status)
         self.media.playbackStateChanged.connect(self.playback_state)
         self.refresh()
@@ -76,7 +77,7 @@ class RecordingsPanel(QWidget):
                 break
 
     def choose_files(self):
-        paths, _ = QFileDialog.getOpenFileNames(self, 'Add Recordings',
+        paths, _ = QFileDialog.getOpenFileNames(self, tr('Add Recordings'),
             self.settings.value('recording_folder', ''), 'Audio recordings (*.wav *.mp3)')
         for path in paths:
             self.add_file(path)
@@ -137,25 +138,25 @@ class RecordingsPanel(QWidget):
             return
         path = self.selected_path()
         if not path or not Path(path).is_file():
-            self.status.setText('Recording file is unavailable. Use Refresh or Add Files.')
+            self.status.setText(tr('Recording file is unavailable. Use Refresh or Add Files.'))
             return
         self.playback_requested.emit()
         self.media.stop()
         self.media.setSource(QUrl.fromLocalFile(path))
         self.media.play()
-        self.status.setText(f'Opening recording: {Path(path).name}')
+        self.status.setText(tr('Opening recording: {v0}', v0=Path(path).name))
 
     def media_status(self, status):
         if status == QMediaPlayer.EndOfMedia:
-            self.status.setText('Recording playback finished.')
+            self.status.setText(tr('Recording playback finished.'))
         elif status == QMediaPlayer.BufferedMedia:
-            self.status.setText(f'Playing recording: {Path(self.media.source().toLocalFile()).name}')
+            self.status.setText(tr('Playing recording: {v0}', v0=Path(self.media.source().toLocalFile()).name))
 
     def playback_state(self, state):
         if state == QMediaPlayer.StoppedState and self.media.error() == QMediaPlayer.NoError:
-            self.status.setText('Recording playback stopped.')
+            self.status.setText(tr('Recording playback stopped.'))
 
     def open_folder(self):
         path = self.selected_path()
         if path and not QDesktopServices.openUrl(QUrl.fromLocalFile(str(Path(path).parent))):
-            self.status.setText('Could not open the recording folder.')
+            self.status.setText(tr('Could not open the recording folder.'))

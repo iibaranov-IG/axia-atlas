@@ -1,6 +1,7 @@
 """Collect installed dependency notices plus upstream Qt/GNU licensing texts.
 
-Run in the pinned build environment. Network failure fails the collection.
+Run in the pinned build environment. Existing upstream texts are reused offline;
+--refresh-upstream explicitly fetches those texts again.
 """
 import importlib.metadata as metadata
 import json
@@ -10,8 +11,9 @@ import sys
 import urllib.request
 
 ROOT = Path(__file__).resolve().parent
-PACKAGES = ('PySide6', 'PySide6_Addons', 'PySide6_Essentials', 'shiboken6',
-            'numpy', 'soxr', 'lameenc', 'cryptography', 'cffi', 'pycparser')
+PACKAGES = tuple(line.split('==')[0] for line in
+                 (ROOT / 'requirements-lock.txt').read_text(encoding='utf-8').splitlines()
+                 if '==' in line)
 
 def collect():
     target = ROOT / 'third_party_notices'
@@ -40,6 +42,8 @@ def collect():
     for module in ('qtpdf', 'qtwebengine'):
         urls[f'{module}-licensing.html'] = f'https://doc.qt.io/qt-6.8/{module}-licensing.html'
     for name, url in urls.items():
+        if (target / name).exists() and '--refresh-upstream' not in sys.argv:
+            continue
         print('Collecting', name, flush=True)
         request = urllib.request.Request(url, headers={'User-Agent': 'AxiaAtlas-build/0.1'})
         with urllib.request.urlopen(request, timeout=60) as response:

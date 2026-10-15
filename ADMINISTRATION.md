@@ -20,7 +20,7 @@ Do not create an independent director account on every workstation. Each client 
 
 ## Permissions and behaviour
 
-- Network discovery/readouts, audio monitoring, audio recording, device web UI, library viewing, library downloads, events/syslog, diagnostics and Ollama have separate permissions.
+- Network discovery/readouts, audio monitoring, audio recording, device web UI, library viewing, library downloads, events/syslog, diagnostics, equipment, scenarios, snapshots and the Virtual Engineer have separate permissions.
 - Recording requires audio monitoring; downloading requires library viewing.
 - Audio-only users can choose the reception adapter through **Audio Monitor → Select Audio Network Adapter** without access to discovery.
 - Configuration web access grants access to the entire device web interface. Atlas cannot enforce individual restrictions inside third-party device pages.

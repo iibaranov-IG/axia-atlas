@@ -1,8 +1,8 @@
 """Compact grouped inventory navigation; groups are not device records."""
+from localization import tr
 import ipaddress
 import json
 from pathlib import Path
-from app_paths import application_data_dir
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QStyle
@@ -10,12 +10,11 @@ from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QStyle
 KIND = Qt.UserRole + 2
 SORT = Qt.UserRole + 3
 STATUS = Qt.UserRole + 5
-_groups_path = application_data_dir() / 'site_device_groups.json'
-SITE_GROUPS = json.loads(_groups_path.read_text(encoding='utf-8')) if _groups_path.exists() else {}
+SITE_GROUPS = {}
 
 
-def device_family(device):
-    assigned = SITE_GROUPS.get(device.get('ip'))
+def device_family(device, site_groups=None):
+    assigned = (SITE_GROUPS if site_groups is None else site_groups).get(device.get('ip'))
     if assigned:
         return assigned['group']
     kind = device.get('device_type', '').casefold()
@@ -44,13 +43,28 @@ class OrderedItem(QTreeWidgetItem):
 
 
 class NetworkTree(QTreeWidget):
-    def __init__(self):
+    def __init__(self, groups_path=None):
         super().__init__()
+        self.site_groups = SITE_GROUPS
+        self.groups_error = ''
+        if groups_path is not None:
+            self.site_groups = {}
+            try:
+                path = Path(groups_path)
+                if path.exists():
+                    groups = json.loads(path.read_text(encoding='utf-8'))
+                    if not isinstance(groups, dict) or any(
+                        not isinstance(v, dict) or not isinstance(v.get('group'), str)
+                        for v in groups.values()):
+                        raise ValueError('Invalid device group reference')
+                    self.site_groups = groups
+            except (ValueError, OSError) as exc:
+                self.groups_error = str(exc)
         self.by_url = {}
         self.groups = {}
         self.grouped = True
         self.query = ''
-        self.setHeaderLabels(['Device / Source', 'State'])
+        self.setHeaderLabels([tr('Device / Source'), tr('State')])
         self.setColumnWidth(0, 285)
         self.setMinimumWidth(380)
         self.setIndentation(16)
@@ -74,7 +88,7 @@ class NetworkTree(QTreeWidget):
         address = device['ip']
         numeric = int(ipaddress.ip_address(address))
         item.setData(0, SORT, f'{numeric:040d}')
-        family = device_family(device)
+        family = device_family(device, self.site_groups)
         item.setData(0, Qt.UserRole + 6, family)
         label = device.get('name') or ' '.join(filter(None, [device.get('product'), device.get('model')]))
         if not label:
@@ -94,7 +108,7 @@ class NetworkTree(QTreeWidget):
         group = None
         if self.grouped:
             if family not in self.groups:
-                group = OrderedItem([family, ''])
+                group = OrderedItem([tr(family), ''])
                 group.setData(0, KIND, 'group')
                 group.setIcon(0, self.style().standardIcon(QStyle.SP_DirIcon))
                 self.addTopLevelItem(group)
@@ -126,8 +140,8 @@ class NetworkTree(QTreeWidget):
             'Saved · monitoring stopped': 'Saved', 'Saved · not verified': 'Saved',
             'Not yet observed': 'Waiting', 'Announcement timed out': 'Timed out'}
         item.setData(0, STATUS, status)
-        item.setText(1, labels.get(status, status))
-        item.setToolTip(1, status + '\nAudio health is not verified.')
+        item.setText(1, tr(labels.get(status, status)))
+        item.setToolTip(1, tr(status) + '\n' + tr('Audio health is not verified.'))
         item.setForeground(1, QColor('#9a5600' if status == 'Announcement timed out' else '#4d5966'))
 
     def filter(self, query):

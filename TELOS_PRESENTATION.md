@@ -1,3 +1,11 @@
+# Historical presentation
+
+This document describes the initial preview proposal. For current functionality
+and validation limits use [the product description](PRODUCT.ru.md) and
+[release notes](RELEASE_NOTES.md) for 0.2.0-rc.1.
+
+---
+
 # Axia Atlas — technical preview for Telos Alliance
 
 **An independent Windows engineering workspace for Axia and Livewire environments.**

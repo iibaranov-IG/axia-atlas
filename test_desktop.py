@@ -1,3 +1,4 @@
+from localization import tr
 import os
 import threading
 import unittest
@@ -7,7 +8,7 @@ from unittest.mock import patch
 
 from PySide6.QtCore import QEventLoop, QTimer, QUrl
 from PySide6.QtWidgets import QApplication, QInputDialog
-from main import Atlas, device_url
+from main import Atlas, device_endpoint, device_url
 
 
 class Page(BaseHTTPRequestHandler):
@@ -29,6 +30,9 @@ class DesktopTest(unittest.TestCase):
     def test_address_validation(self):
         self.assertEqual(device_url('192.0.2.1'), 'http://192.0.2.1/')
         self.assertEqual(device_url('::1'), 'http://[::1]/')
+        self.assertEqual(device_url('192.0.2.45:7777'), 'http://192.0.2.45:7777/')
+        self.assertEqual(device_url('https://192.0.2.46:3001/status'), 'https://192.0.2.46:3001/status')
+        self.assertEqual(device_endpoint('192.0.2.45:7777')[1], '192.0.2.45')
         for invalid in ['javascript:alert(1)', 'example.com/path', '999.0.0.1']:
             with self.assertRaises(ValueError):
                 device_url(invalid)
@@ -40,12 +44,13 @@ class DesktopTest(unittest.TestCase):
         window.show()
         self.app.processEvents()
         self.assertEqual(window.tabs.count(), 5)
-        self.assertEqual([window.left_tabs.tabText(i) for i in range(3)], ['Network', 'Audio', 'Library'])
+        self.assertEqual([window.left_tabs.tabText(i) for i in range(3)], [tr(v) for v in ('Network', 'Audio', 'Library')])
         for index in range(3):
             window.left_tabs.setCurrentIndex(index)
-            self.assertTrue(window.player.isVisible())
+            self.assertEqual(window.player.isVisible(), index == 1)
         window.tabs.setCurrentIndex(1)
-        window.tasks_audio.click()
+        self.assertEqual(window.tabs.tabText(1), tr('Scenarios'))
+        window.open_audio()
         self.assertIs(window.tabs.currentWidget(), window.audio_details)
         self.assertEqual(window.left_tabs.currentIndex(), 1)
         self.assertFalse(window.nav[0].isEnabled())
@@ -53,7 +58,7 @@ class DesktopTest(unittest.TestCase):
             window.add_device()
             window.add_device()
         self.assertEqual(len(window.network.devices()), 1)
-        self.assertEqual(window.network.devices()[0].text(1), 'Unknown')
+        self.assertEqual(window.network.devices()[0].text(1), tr('Unknown'))
         server = ThreadingHTTPServer(('127.0.0.1', 0), Page)
         threading.Thread(target=server.serve_forever, daemon=True).start()
         try:

@@ -9,6 +9,9 @@ dist/
 *.log
 .venv/
 site_device_groups.json
+station_data.json
+station-reference.json
+assistant_fresh_cases.json
 *.mp3
 *.wav
 *.sqlite*

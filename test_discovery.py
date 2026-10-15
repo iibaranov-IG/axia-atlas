@@ -1,3 +1,4 @@
+from localization import tr
 """Synthetic protocol fixtures and loopback-only receive-to-inventory verification."""
 import tempfile
 import unittest
@@ -84,20 +85,20 @@ class DiscoveryTests(unittest.TestCase):
             self.assertIn('Local fixture', item.text(0))
             self.assertEqual(item.childCount(), 1)
             self.assertIn('1301', item.child(0).text(0))
-            self.assertEqual(item.text(1), 'Seen')
-            self.assertIn('audio unverified', item.toolTip(1))
+            self.assertEqual(item.text(1), tr('Seen'))
+            self.assertIn(tr('Audio health is not verified.'), item.toolTip(1))
             with patch('main.time.monotonic', return_value=window.observed_times['127.0.0.1'] + 161):
                 window.discovery_tick()
-                self.assertEqual(item.text(1), 'Timed out')
+                self.assertEqual(item.text(1), tr('Timed out'))
                 window.discovery_tick()
                 self.assertEqual(window.log.toPlainText().count('Announcement timeout:'), 1)
             window.toggle_discovery()
-            self.assertEqual(item.text(1), 'Saved')
+            self.assertEqual(item.text(1), tr('Saved'))
             window.close()
             restored = Atlas(directory)
             self.assertEqual(len(restored.network.devices()), 1)
             self.assertFalse(restored.discovery_active)
-            self.assertEqual(restored.network.devices()[0].text(1), 'Saved')
+            self.assertEqual(restored.network.devices()[0].text(1), tr('Saved'))
             restored.close()
             app.processEvents()
 

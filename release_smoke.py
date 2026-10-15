@@ -45,7 +45,7 @@ def run(app, output):
         path = root / 'manual.pdf'
         writer = QPdfWriter(str(path))
         painter = QPainter(writer)
-        painter.drawText(100, 400, 'Axia Atlas build verification')
+        painter.drawText(100, 400, 'Axia Atlas build verification: searchable reference document.')
         painter.end()
         del writer
         viewer = DocumentViewer(window)
@@ -55,6 +55,36 @@ def run(app, output):
         assert viewer.pdf.pageCount() == 1
         assert not viewer.pdf.render(0, QSize(300, 400)).isNull()
         checks['pdf'] = True
+        entry=dict(title='Build verification manual',family='Test only',url='https://example.test/fixture.pdf',source_page='https://example.test',applicability='Synthetic verification')
+        window.manuals.ingest(path,entry)
+        assert window.manuals.search('verification')[0]['page']==1
+        window.open_manuals()
+        panel=window.tabs.currentWidget()
+        panel.query.setText('verification');panel.search()
+        assert panel.results.topLevelItemCount()==1
+        panel.open_item()
+        assert window.tabs.currentWidget().pdf.pageCount()==1
+        checks['manual_knowledge'] = True
+        assert window.station.data is None
+        assert window.studio_map.topology_rows() == []
+        assert not window.discovery_active and not window.inventory.devices
+        assert window.left_tabs.tabText(0) == 'Сеть'
+        window.open_station()
+        station_panel=window.tabs.currentWidget()
+        station_panel.kind.setCurrentIndex(1)
+        assert station_panel.table.topLevelItemCount() == 0
+        checks['clean_russian_first_run'] = True
+        from faster_whisper import WhisperModel
+        assert WhisperModel is not None
+        checks['speech_recognition_runtime'] = True
+        from PySide6.QtCore import QProcess
+        worker = QProcess()
+        command = [sys.executable] if getattr(sys, 'frozen', False) else [sys.executable, str(Path(__file__).with_name('main.py'))]
+        worker.start(command[0], command[1:] + ['--transcribe-worker', 'transcribe', str(root/'model'), str(root/'absent.wav')])
+        assert worker.waitForFinished(30000), 'Transcription worker did not finish'
+        response = bytes(worker.readAllStandardOutput()).decode('utf-8')
+        assert worker.exitCode() == 1 and json.loads(response)['kind'] == 'error', response
+        checks['transcription_worker_reports_missing_input'] = True
         class Handler(BaseHTTPRequestHandler):
             def do_GET(self):
                 data = b'<html><title>Atlas build fixture</title><h1>Loopback document</h1></html>'

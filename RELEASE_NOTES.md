@@ -1,35 +1,27 @@
-# Axia Atlas 0.1.0-preview.1
+# 0.2.0-rc.1 — release candidate
 
-First public source and portable Windows x64 preview. This is a **Pre-release** for evaluation, not a production acceptance announcement.
-
-## Download and launch
-
-Download `AxiaAtlas-0.1.0-preview.1-windows-x64.zip`, extract the whole archive and open `AxiaAtlas.exe`. Keep its `_internal` directory alongside it. No Python installation is required. The archive includes a quick-start guide and dependency notices.
-
-This is a portable folder package, not an installer. It is not code-signed. GitHub's automatically generated **Source code** archives are for developers; they are not the runnable Windows package.
+This candidate consolidates the working Atlas application after 0.1.0-preview.1.
 
 ## Included
 
-- Livewire discovery and grouped device/source inventory.
-- Embedded device web interfaces and saved credential profiles.
-- Stereo L24/48 kHz audio monitoring; WAV/MP3 recording and playback.
-- Unified Events, selected-channel Health, observed changes and diagnostic ZIP export.
-- Equipment-matched Library with internal PDF viewing.
-- Central accounts and per-function engineering permissions.
+Russian and English interface; Windows/macOS visual styles; collapsible workspace and assistant panes; Network, Audio, Library, Devices and Scenarios; embedded device web pages and PDF manuals; numbered-source listening and WAV/MP3 recording; events/syslog; health monitoring; equipment records; local signal map, shift calendar and guarded routing plans; configuration snapshots; diagnostic exports; local transcription; optional advisory assistant; separate Broadcast Player process.
 
-## Verification
+## Release preparation
 
-- 46 automated tests passed on Windows 10 x64 / Python 3.11.9, including independent MP3 decoding with FFmpeg/FFprobe.
-- The frozen EXE passed its fixture-based desktop, PDF, WebEngine, DPAPI/HTTPS account, resampling and MP3 checks with Python paths removed from its environment.
-- Public source exports contain no private deployment state. Verification uses generated fixtures and loopback services.
+Fresh installations no longer receive an embedded studio map or station reference. Existing studio records are retained. Russian is the initial language and a saved language choice is preserved. Network status labels and grouping are translated. Only one normal Atlas process can lock a workspace. Device groups belong to that workspace; malformed group files are preserved and reported. Build tooling includes translations, recognition runtime, dependency versions and source hashes.
 
-## Known limitations
+## Validation
 
-- Clean-machine and Windows 11 acceptance have not been performed.
-- Loss-free real-network audio reception and subjective listening acceptance remain unresolved; inspect packet-gap statistics before relying on recordings.
-- Live input support is currently stereo L24/48 kHz RTP, not every Livewire/AES67 format.
-- Scenarios, firmware installation and configuration restoration are not implemented. Tasks remains a placeholder.
-- The central account host must keep Atlas open; there is no background Windows service.
-- First launch creates a new local setup; private development inventory and passwords are not imported or shipped.
+Acceptance results for this exact candidate are recorded in VALIDATION.json. Tests use synthetic data and loopback services. No production radio equipment is contacted by the acceptance suite.
 
-See the README, full product description and Administration guide for details. Original Atlas code is MIT; bundled dependencies retain their respective licenses. Atlas is independent and is not an official Telos Alliance product.
+## Known limits
+
+- This is an unsigned portable Windows x64 candidate, not an installer or an on-air certification.
+- A clean Windows machine and prolonged operation with physical audio/network equipment still require acceptance.
+- Supported Livewire/RTP PCM reception is not universal AES67/PTP compatibility.
+- Routing needs compatible LWRP devices; preflight does not prove the backup audio is good. Continuous automatic failover is not implemented.
+- Configuration snapshots are partial; full restoration and firmware installation are not implemented.
+- The account host must keep Atlas running. Equipment cards, scenarios, maps and shifts are local.
+- Optional assistant and recognition quality depend on local resources and supplied references. Source tests and runtime loading alone do not establish answer or transcript quality.
+- Vendor pages and reference contents retain their original language.
+- Broadcast Player is a separate preview module; no claim of unattended playout reliability is made.

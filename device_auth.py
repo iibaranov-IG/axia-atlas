@@ -1,14 +1,14 @@
 """Device authentication with one attempt per explicitly assigned credential profile."""
+from localization import tr
 from PySide6.QtCore import Qt, QTimer, QUrl
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QFormLayout, QLabel, QLineEdit, QMessageBox
 
 
 def request_credentials(parent, url, realm):
     dialog = QDialog(parent)
-    dialog.setWindowTitle('Device Sign In')
+    dialog.setWindowTitle(tr('Device Sign In'))
     form = QFormLayout(dialog)
-    message = QLabel(f'Device: {url.host()}\nAccess area: {realm}\n'
-        'Enter the device credentials. If this window appears again, the device rejected the previous sign-in.')
+    message = QLabel(tr('Device: {v0}\nAccess area: {v1}\nEnter the device credentials. If this window appears again, the device rejected the previous sign-in.', v0=url.host(), v1=realm))
     message.setTextFormat(Qt.PlainText)
     message.setWordWrap(True)
     form.addRow(message)
@@ -17,8 +17,8 @@ def request_credentials(parent, url, realm):
     password = QLineEdit()
     password.setObjectName('device_password')
     password.setEchoMode(QLineEdit.Password)
-    form.addRow('Username', username)
-    form.addRow('Password', password)
+    form.addRow(tr('Username'), username)
+    form.addRow(tr('Password'), password)
     buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
     buttons.accepted.connect(dialog.accept)
     buttons.rejected.connect(dialog.reject)
@@ -57,7 +57,7 @@ def authenticate(parent, url, authenticator):
             except (OSError, ValueError, PermissionError) as exc:
                 parent.setProperty('auth_cancelled', True)
                 QTimer.singleShot(0, parent.stop)
-                QMessageBox.warning(parent, 'Device Sign In', str(exc))
+                QMessageBox.warning(parent, tr('Device Sign In'), str(exc))
                 return
             if saved is not None:
                 authenticator.setUser(saved[0])

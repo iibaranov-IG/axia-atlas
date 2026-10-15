@@ -1,3 +1,4 @@
+from localization import tr
 import unittest
 from unittest.mock import patch
 from PySide6.QtWidgets import QApplication
@@ -47,5 +48,5 @@ class TreeTests(unittest.TestCase):
         tree.ensure_device('http://192.0.2.9/', {'ip': '192.0.2.9', 'device_type': 'lwwd'})
         self.assertEqual(tree.topLevelItemCount(), 2)
         self.assertEqual(len(tree.devices()), 2)
-        self.assertEqual(low.parent().text(0), 'PC Audio Drivers')
+        self.assertEqual(low.parent().text(0), tr('PC Audio Drivers'))
         tree.close()

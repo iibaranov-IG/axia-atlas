@@ -16,6 +16,11 @@ from urllib.parse import urlsplit
 
 
 PERMISSIONS = {
+    'roster_view': 'View duty roster and vacations',
+    'roster_edit': 'Edit duty roster and vacations',
+    'equipment': 'View and edit equipment cards',
+    'scenarios': 'Create and run authorized routing scenarios',
+    'backups': 'Capture and compare configuration snapshots',
     'network': 'Network discovery and device information',
     'audio': 'Audio monitoring and recording playback',
     'record': 'Record audio',
@@ -24,7 +29,7 @@ PERMISSIONS = {
     'downloads': 'Download manuals, firmware and software',
     'events': 'View and export events / receive syslog',
     'diagnostics': 'Health, change history and diagnostic reports',
-    'ollama': 'Engineering Assistant (Ollama)',
+    'ollama': 'Виртуальный инженер',
 }
 
 
@@ -107,6 +112,7 @@ class AccessStore:
                 token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), expires REAL NOT NULL);
         ''')
         self.user_id = None
+        self.local_setup = False
 
     @property
     def configured(self):
@@ -114,6 +120,9 @@ class AccessStore:
 
     @property
     def user(self):
+        if self.local_setup:
+            return dict(id=0, name='Local setup', director=0, enabled=1,
+                        permissions=json.dumps(list(PERMISSIONS)), must_change=0)
         if self.user_id is None:
             return None
         row = self.db.execute('SELECT id,name,director,enabled,permissions,must_change FROM users WHERE id=?', (self.user_id,)).fetchone()
@@ -128,7 +137,7 @@ class AccessStore:
 
     def require_director(self):
         user = self.user
-        if not user or not user['director'] or user['must_change']:
+        if self.local_setup or not user or not user['director'] or user['must_change']:
             raise PermissionError('Only the technical director can manage accounts and credentials.')
 
     def audit(self, action, target='', actor=None):

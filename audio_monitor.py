@@ -2,6 +2,7 @@
 
 Format reference: https://docs.telosalliance.com/docs/playing-livewire-streams-with-standard-media-players
 """
+from localization import tr
 import math
 import struct
 import threading
@@ -78,9 +79,11 @@ class AudioBuffer:
         self.frames = 0
         self.last_packet = 0.0
         self.left = self.right = -60.0
+        self.window_left = self.window_right = -100.0
         self.error = ''
         self.bound = False
         self.recorder = None
+        self.recording_taps = []
 
     def feed(self, packet):
         try:
@@ -116,11 +119,15 @@ class AudioBuffer:
             self.last_packet = time.monotonic()
             if self.recorder:
                 self.recorder.feed(pcm24 if self.recorder.input_width == 3 else pcm, stamp)
+            for recorder in self.recording_taps:
+                recorder.feed(pcm24, stamp)
             samples = array('h', pcm)  # application target is little-endian Windows
             left = max((abs(s) for s in samples[0::2]), default=0)
             right = max((abs(s) for s in samples[1::2]), default=0)
             self.left = max(-60, 20 * math.log10(max(left, 1) / 32768))
             self.right = max(-60, 20 * math.log10(max(right, 1) / 32768))
+            self.window_left = max(self.window_left, 20 * math.log10(max(left, 1) / 32768))
+            self.window_right = max(self.window_right, 20 * math.log10(max(right, 1) / 32768))
 
 
 class AudioReceiver(QThread):
@@ -177,16 +184,16 @@ class AudioSourceList(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 4, 4, 4)
         self.search = QLineEdit()
-        self.search.setPlaceholderText('Find channel, source or device…')
+        self.search.setPlaceholderText(tr('Find channel, source or device…'))
         layout.addWidget(self.search)
-        self.only_favorites = QCheckBox('Favorites only')
+        self.only_favorites = QCheckBox(tr('Favorites only'))
         layout.addWidget(self.only_favorites)
         self.tree = QTreeWidget()
         self.tree.setRootIsDecorated(False)
-        self.tree.setHeaderLabels(['Channel / Source', 'Device'])
+        self.tree.setHeaderLabels([tr('Channel / Source'), tr('Device')])
         self.tree.setColumnWidth(0, 230)
         layout.addWidget(self.tree)
-        self.favorite_button = QPushButton('Add / Remove Favorite')
+        self.favorite_button = QPushButton(tr('Add / Remove Favorite'))
         self.favorite_button.setEnabled(False)
         layout.addWidget(self.favorite_button)
         self.search.textChanged.connect(self.filter)
@@ -286,11 +293,11 @@ class CompactPlayer(QWidget):
         self.last_recording = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(6, 6, 6, 6)
-        self.title = QLabel('No audio source selected')
+        self.title = QLabel(tr('No audio source selected'))
         self.title.setWordWrap(True)
         self.title.setStyleSheet('font-weight:600;')
         layout.addWidget(self.title)
-        self.state = QLabel('Stopped')
+        self.state = QLabel(tr('Stopped'))
         self.state.setWordWrap(True)
         layout.addWidget(self.state)
         self.meters = []
@@ -308,19 +315,19 @@ class CompactPlayer(QWidget):
         self.output_devices = QMediaDevices.audioOutputs()
         for device in self.output_devices:
             self.outputs.addItem(device.description())
-        self.outputs.setToolTip('Audio output device')
+        self.outputs.setToolTip(tr('Audio output device'))
         layout.addWidget(self.outputs)
         row = QHBoxLayout()
-        self.play = QPushButton('Play')
+        self.play = QPushButton(tr('Play'))
         self.play.setEnabled(False)
         self.play.clicked.connect(self.toggle)
         row.addWidget(self.play)
         self.volume = QSlider(Qt.Horizontal)
         self.volume.setRange(0, 100)
         self.volume.setValue(15)
-        self.volume.setToolTip('Playback volume')
+        self.volume.setToolTip(tr('Playback volume'))
         self.volume.valueChanged.connect(lambda value: self.sink.setVolume(value / 100) if self.sink else None)
-        row.addWidget(QLabel('Volume'))
+        row.addWidget(QLabel(tr('Volume')))
         row.addWidget(self.volume)
         layout.addLayout(row)
         format_row = QHBoxLayout()
@@ -347,7 +354,7 @@ class CompactPlayer(QWidget):
             for index in range(self.wav_quality.count()):
                 if self.wav_quality.itemData(index) == [saved_rate, saved_width]:
                     self.wav_quality.setCurrentIndex(index)
-        format_row.addWidget(QLabel('Record as'))
+        format_row.addWidget(QLabel(tr('Record as')))
         format_row.addWidget(self.record_format)
         format_row.addWidget(self.record_bitrate)
         format_row.addWidget(self.wav_quality)
@@ -355,12 +362,12 @@ class CompactPlayer(QWidget):
         self.record_size = QLabel('')
         layout.addWidget(self.record_size)
         record_row = QHBoxLayout()
-        self.record_button = QPushButton('Record…')
+        self.record_button = QPushButton(tr('Record…'))
         self.record_button.setEnabled(False)
-        self.record_button.setToolTip('Record the selected channel. Stop Recording keeps monitoring active. Changing source or stopping playback finalizes the file.')
+        self.record_button.setToolTip(tr('Record the selected channel. Stop Recording keeps monitoring active. Changing source or stopping playback finalizes the file.'))
         self.record_button.clicked.connect(self.toggle_recording)
         record_row.addWidget(self.record_button)
-        self.record_status = QLabel('Not recording')
+        self.record_status = QLabel(tr('Not recording'))
         self.record_status.setWordWrap(True)
         record_row.addWidget(self.record_status, 1)
         layout.addLayout(record_row)
@@ -368,11 +375,11 @@ class CompactPlayer(QWidget):
         self.record_path.setWordWrap(True)
         self.record_path.setTextInteractionFlags(Qt.TextSelectableByMouse)
         layout.addWidget(self.record_path)
-        self.open_recording_button = QPushButton('Open Recording Folder')
+        self.open_recording_button = QPushButton(tr('Open Recording Folder'))
         self.open_recording_button.setEnabled(False)
         self.open_recording_button.clicked.connect(self.open_recording_folder)
         layout.addWidget(self.open_recording_button)
-        self.detail_label = QLabel('Select a source in the Audio tab. Stereo Livewire L24 / 48 kHz is supported.')
+        self.detail_label = QLabel(tr('Select a source in the Audio tab. Stereo Livewire L24 / 48 kHz is supported.'))
         self.detail_label.setWordWrap(True)
         self.timer = QTimer(self)
         self.timer.setInterval(10)
@@ -396,8 +403,8 @@ class CompactPlayer(QWidget):
         size = estimated_mb_per_hour(format_name, bitrate, sample_rate, sample_width)
         rate_text = (f'{sample_rate * sample_width * 8 * 2 / 1000:g} kbps' if format_name == 'WAV' else
                      f'{bitrate} kbps CBR')
-        self.record_size.setText(f'{rate_text} · stereo · approx. {size:.1f} MB/hour')
-        self.record_size.setToolTip('Decimal MB, excluding headers and the event report. WAV 48 kHz / 24-bit preserves the received samples. WAV 44.1 kHz is resampled. MP3 uses constant bitrate.')
+        self.record_size.setText(tr('{v0} · stereo · approx. {v1:.1f} MB/hour', v0=rate_text, v1=size))
+        self.record_size.setToolTip(tr('Decimal MB, excluding headers and the event report. WAV 48 kHz / 24-bit preserves the received samples. WAV 44.1 kHz is resampled. MP3 uses constant bitrate.'))
         if self.settings:
             self.settings.setValue('recording_format', format_name)
             self.settings.setValue('recording_mp3_bitrate', bitrate)
@@ -409,13 +416,11 @@ class CompactPlayer(QWidget):
         self.stop()
         self.source = dict(source)
         self.title.setText(f'{source.get("channel") or "—"} · {source["name"] or "Unnamed source"}\n{source["ip"]}')
-        self.detail_label.setText(f'Selected source: {source["ip"]} → {source["multicast"]}\n'
-            f'Channel: {source.get("channel") or "Unknown"} · {source["name"] or "Unnamed source"}\n'
-            'No audio statistics for this selection yet. Press Play to receive the stream.')
+        self.detail_label.setText(tr('Selected source: {v0} → {v1}\nChannel: {v2} · {v3}\nNo audio statistics for this selection yet. Press Play to receive the stream.', v0=source['ip'], v1=source['multicast'], v2=source.get('channel') or 'Unknown', v3=source['name'] or 'Unnamed source'))
         allowed = source.get('enabled') is not False and source.get('channels', 2) == 2
         self.play.setEnabled(allowed and getattr(self, 'permission_check', lambda _: True)('audio'))
         self.record_button.setEnabled(allowed and getattr(self, 'permission_check', lambda _: True)('record'))
-        self.state.setText('Ready · press Play' if allowed else 'Source disabled or unsupported channel count')
+        self.state.setText((tr('Ready · press Play') if allowed else tr('Source disabled or unsupported channel count')))
         if was_playing and allowed:
             self.start()
 
@@ -424,17 +429,17 @@ class CompactPlayer(QWidget):
 
     def start(self):
         if not getattr(self, 'permission_check', lambda _: True)('audio'):
-            self.state.setText('Audio monitoring is not permitted for this account.')
+            self.state.setText(tr('Audio monitoring is not permitted for this account.'))
             return
         if not self.source or self.receiver:
             return
         self.monitoring_started.emit()
         interface = self.interface_provider()
         if interface is None:
-            self.state.setText('Select the broadcast network adapter in Network Discovery.')
+            self.state.setText(tr('Select the broadcast network adapter in Network Discovery.'))
             return
         if not self.output_devices or self.outputs.currentIndex() < 0:
-            self.state.setText('No audio output is available.')
+            self.state.setText(tr('No audio output is available.'))
             return
         fmt = QAudioFormat()
         fmt.setSampleRate(48000)
@@ -444,7 +449,7 @@ class CompactPlayer(QWidget):
         if not device.isFormatSupported(fmt):
             fmt = device.preferredFormat()
         if fmt.channelCount() != 2 or fmt.sampleFormat() not in (QAudioFormat.Float, QAudioFormat.Int16, QAudioFormat.Int32):
-            self.state.setText('Selected output has no supported stereo format.')
+            self.state.setText(tr('Selected output has no supported stereo format.'))
             return
         self.output_format = fmt
         self.converter = OutputConverter(fmt.sampleRate(), fmt.sampleFormat())
@@ -458,16 +463,16 @@ class CompactPlayer(QWidget):
         self.writer = self.sink.start()
         if self.writer is None or self.sink.error() != QAudio.NoError:
             self.stop()
-            self.state.setText('Could not open the selected audio output.')
+            self.state.setText(tr('Could not open the selected audio output.'))
             return
         self.receiver = AudioReceiver(self.source, interface.index())
         self.receiver.start()
         self.written_bytes = 0
         self.sink.stateChanged.connect(self.output_state_changed)
-        self.play.setText('Stop')
+        self.play.setText(tr('Stop'))
         self.outputs.setEnabled(False)
-        self.state.setText('Waiting for the selected stream…')
-        self.detail_label.setText(f'Source: {self.source["ip"]} → {self.source["multicast"]}\nWaiting for the selected stream…')
+        self.state.setText(tr('Waiting for the selected stream…'))
+        self.detail_label.setText(tr('Source: {v0} → {v1}\nWaiting for the selected stream…', v0=self.source['ip'], v1=self.source['multicast']))
         self.started_at = time.monotonic()
         self.last_ui = 0
         self.previous_gaps = 0
@@ -483,7 +488,7 @@ class CompactPlayer(QWidget):
         self.timer.stop()
         self.stop_recording('Playback stopped or source changed')
         if self.receiver:
-            self.detail_label.setText('Last session · stopped\n' + self.detail_label.text().removeprefix('Last session · stopped\n'))
+            self.detail_label.setText((tr('Last session · stopped\n') + self.detail_label.text().removeprefix('Last session · stopped\n')))
         if self.sink:
             self.sink.reset()  # discard queued old audio before a source label changes
             self.sink.deleteLater()
@@ -499,15 +504,15 @@ class CompactPlayer(QWidget):
             self.converter = None
         self.output_pending.clear()
         self.outputs.setEnabled(True)
-        self.play.setText('Play')
-        self.state.setText('Stopped')
+        self.play.setText(tr('Play'))
+        self.state.setText(tr('Stopped'))
         for meter in self.meters:
             meter.setValue(-60)
             meter.setFormat('— dBFS')
 
     def toggle_recording(self):
         if not getattr(self, 'permission_check', lambda _: True)('record'):
-            self.record_status.setText('Recording is not permitted for this account.')
+            self.record_status.setText(tr('Recording is not permitted for this account.'))
             return
         if self.recorder:
             self.stop_recording()
@@ -518,11 +523,11 @@ class CompactPlayer(QWidget):
         name = f'Atlas_{self.source["ip"]}_ch{self.source.get("channel", "unknown")}_{datetime.now():%Y%m%d_%H%M%S}.{extension}'
         description = 'MP3 audio (*.mp3)' if extension == 'mp3' else 'Wave audio (*.wav)'
         initial_path = str(Path(self.settings.value('recording_folder', '')) / name) if self.settings else name
-        path, _ = QFileDialog.getSaveFileName(self, 'Record Selected Channel', initial_path, description)
+        path, _ = QFileDialog.getSaveFileName(self, tr('Record Selected Channel'), initial_path, description)
         if not path:
             return
         if Path(path).suffix and Path(path).suffix.lower() != '.' + extension:
-            self.record_status.setText(f'The selected format requires a .{extension} file. Choose Record again to correct the name.')
+            self.record_status.setText(tr('The selected format requires a .{v0} file. Choose Record again to correct the name.', v0=extension))
             return
         if not path.lower().endswith('.' + extension):
             path += '.' + extension
@@ -533,7 +538,7 @@ class CompactPlayer(QWidget):
 
     def start_recording(self, path):
         if not getattr(self, 'permission_check', lambda _: True)('record'):
-            self.record_status.setText('Recording is not permitted for this account.')
+            self.record_status.setText(tr('Recording is not permitted for this account.'))
             return
         if not self.receiver or self.recorder:
             return False
@@ -543,7 +548,7 @@ class CompactPlayer(QWidget):
                         if self.record_format.currentText() == 'MP3' else
                         WaveRecorder(path, self.source, sample_rate=sample_rate, sample_width=sample_width, input_width=3))
         except (OSError, ValueError, RuntimeError) as exc:
-            self.record_status.setText(f'Could not create recording: {exc}')
+            self.record_status.setText(tr('Could not create recording: {v0}', v0=exc))
             self.failed.emit(self.record_status.text())
             return False
         with self.receiver.buffer.lock:
@@ -555,8 +560,8 @@ class CompactPlayer(QWidget):
         self.last_recording = Path(path)
         self.record_path.setText(Path(path).name)
         self.record_path.setToolTip(str(Path(path).resolve()))
-        self.record_button.setText('Stop Recording')
-        self.record_status.setText('Armed · waiting for audio')
+        self.record_button.setText(tr('Stop Recording'))
+        self.record_status.setText(tr('Armed · waiting for audio'))
         self.open_recording_button.setEnabled(True)
         self.logged.emit(f'Recording armed: {self.source["ip"]} / {self.source["multicast"]} → {path}')
         return True
@@ -571,7 +576,7 @@ class CompactPlayer(QWidget):
         recorder.stop(reason)
         self.recorder = None
         self.update_recording_format()
-        self.record_button.setText('Record…')
+        self.record_button.setText(tr('Record…'))
         if recorder.error:
             message = recorder.error
         elif not recorder.frames:
@@ -594,7 +599,7 @@ class CompactPlayer(QWidget):
         from PySide6.QtGui import QDesktopServices
         if self.last_recording:
             if not QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.last_recording.resolve().parent))):
-                self.record_status.setText('Could not open recording folder.')
+                self.record_status.setText(tr('Could not open recording folder.'))
 
     def pump(self):
         if not self.receiver or not self.sink:
@@ -649,16 +654,8 @@ class CompactPlayer(QWidget):
                 meter.setValue(round(level))
                 meter.setFormat(f'{level:.1f} dBFS' if receiving else '— dBFS')
             elapsed = max(.1, now - self.started_at)
-            self.state.setText('Playing selected stream' if receiving and self.written_bytes else
-                'No compatible audio received' if buffer.invalid else 'Buffering selected stream…' if receiving else 'Waiting for selected stream…')
-            self.detail_label.setText(f'Source: {self.source["ip"]} → {self.source["multicast"]}\n'
-                f'Packets: {buffer.packets} · average {buffer.packets / elapsed:.0f}/s\n'
-                f'Sequence gaps: {buffer.gaps} · late/duplicate: {buffer.late}\n'
-                f'Missing packets: {100 * buffer.gaps / max(1, buffer.packets + buffer.gaps):.1f}% · gaps also affect recordings\n'
-                f'Unsupported packets: {buffer.invalid} · other source: {buffer.foreign}\n'
-                f'Buffer resets: {buffer.overflows} · output underruns: {self.output_underruns}\n'
-                f'PCM sent to output: {self.written_bytes} bytes\n'
-                f'Levels are measured before playback volume. Output: {self.output_format.sampleRate()} Hz / stereo / {self.output_format.sampleFormat().name}.')
+            self.state.setText((tr('Playing selected stream') if receiving and self.written_bytes else (tr('No compatible audio received') if buffer.invalid else (tr('Buffering selected stream…') if receiving else tr('Waiting for selected stream…')))))
+            self.detail_label.setText(tr('Source: {v0} → {v1}\nPackets: {v2} · average {v3:.0f}/s\nSequence gaps: {v4} · late/duplicate: {v5}\nMissing packets: {v6:.1f}% · gaps also affect recordings\nUnsupported packets: {v7} · other source: {v8}\nBuffer resets: {v9} · output underruns: {v10}\nPCM sent to output: {v11} bytes\nLevels are measured before playback volume. Output: {v12} Hz / stereo / {v13}.', v0=self.source['ip'], v1=self.source['multicast'], v2=buffer.packets, v3=buffer.packets / elapsed, v4=buffer.gaps, v5=buffer.late, v6=100 * buffer.gaps / max(1, buffer.packets + buffer.gaps), v7=buffer.invalid, v8=buffer.foreign, v9=buffer.overflows, v10=self.output_underruns, v11=self.written_bytes, v12=self.output_format.sampleRate(), v13=self.output_format.sampleFormat().name))
             if self.recorder:
                 elapsed_recording = self.recorder.duration_seconds
                 minutes, seconds = divmod(int(elapsed_recording), 60)
@@ -670,13 +667,13 @@ class CompactPlayer(QWidget):
                     message += f' · missing {missing:.3f}s'
                 self.record_status.setText(message)
                 if not receiving and self.recorder.frames:
-                    self.record_status.setText(message + ' · waiting for stream')
+                    self.record_status.setText((message + tr(' · waiting for stream')))
             if buffer.gaps > self.previous_gaps:
                 self.previous_dropouts = now
             self.previous_gaps = buffer.gaps
             if receiving and now - self.previous_dropouts < 3:
                 loss = 100 * buffer.gaps / max(1, buffer.packets + buffer.gaps)
-                self.state.setText(f'Audio gaps · {loss:.1f}% packets missing')
+                self.state.setText(tr('Audio gaps · {v0:.1f}% packets missing', v0=loss))
         if self.recorder and self.recorder.error:
             self.stop_recording('Recording error')
         if self.sink.error() not in (QAudio.NoError, QAudio.UnderrunError):

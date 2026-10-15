@@ -1,12 +1,47 @@
 {
-  "version": "0.1.0-preview.1",
-  "frozen": true,
-  "passed": true,
-  "checks": {
-    "desktop": true,
-    "dpapi_and_https_accounts": true,
-    "pdf": true,
-    "webengine": true,
-    "resampling_and_mp3": true
-  }
+  "version": "0.2.0-rc.1",
+  "checked_at": "2026-10-15T07:45:19.968570+00:00",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "core_tests": 92,
+  "existing_player_module_regression_tests": 27,
+  "failed": 0,
+  "skipped": 0,
+  "frozen_executable": {
+    "version": "0.2.0-rc.1",
+    "frozen": true,
+    "passed": true,
+    "checks": {
+      "desktop": true,
+      "dpapi_and_https_accounts": true,
+      "pdf": true,
+      "manual_knowledge": true,
+      "clean_russian_first_run": true,
+      "speech_recognition_runtime": true,
+      "transcription_worker_reports_missing_input": true,
+      "webengine": true,
+      "resampling_and_mp3": true
+    }
+  },
+  "python_removed_from_path": true,
+  "packaged_russian_transcription": {
+    "passed": true,
+    "expected_phrase": "резервный источник звука",
+    "observed_text": "Добрый день! Дежурный инженер проверяет резервный источник звука. Запись готова к расшифровке."
+  },
+  "native_window": {
+    "version_title_verified": true,
+    "russian_navigation_verified": true,
+    "duplicate_workspace_rejected": true,
+    "screenshot_capture": "Unavailable: Windows Graphics Capture FrameArrived timeout in the current remote desktop session",
+    "native_pointer_input": "Unavailable: coordinate input geometry is unavailable",
+    "layout": "Qt-rendered Russian workspace inspected; GUI workflow tests passed"
+  },
+  "production_equipment_contacted": false,
+  "remaining": [
+    "Clean Windows installation acceptance",
+    "Physical audio output and long-running network acceptance",
+    "Device compatibility matrix",
+    "Code signing and installer",
+    "GitHub publication: stored credentials rejected"
+  ]
 }

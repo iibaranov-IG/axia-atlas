@@ -47,6 +47,8 @@ class HealthTests(unittest.TestCase):
         app = QApplication.instance() or QApplication([])
         with tempfile.TemporaryDirectory() as directory:
             window = Atlas(directory)
+            from test_release_fixtures import seed_studio
+            seed_studio(window.studio_map)
             try:
                 window.show()
                 window.tabs.setCurrentWidget(window.health)
@@ -58,6 +60,8 @@ class HealthTests(unittest.TestCase):
                     window.health.export.click()
                 with zipfile.ZipFile(path) as archive:
                     self.assertEqual(json.loads(archive.read('health.json'))['stream'], 'Not monitored')
+                    self.assertTrue(json.loads(archive.read('studio-map.json')))
+                    self.assertEqual(json.loads(archive.read('equipment-cards.json')), [])
                     self.assertIn('No audio recording', archive.read('README.txt').decode())
                 with self.assertRaises(FileExistsError):
                     export_report(path, {}, {}, [], [])

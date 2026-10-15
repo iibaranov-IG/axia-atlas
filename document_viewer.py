@@ -1,12 +1,13 @@
 """In-application HTML and PDF references; never launches external handlers."""
+from localization import tr
 from pathlib import Path
-from PySide6.QtCore import QUrl, QTimer, QBuffer, QIODevice, QPointF, Qt
+from PySide6.QtCore import QUrl, QTimer, QBuffer, QIODevice, QPointF, Qt, Signal
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PySide6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QStackedWidget, QSpinBox, QComboBox
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QStackedWidget, QSpinBox, QComboBox, QStyle
 
 
 class ReferencePage(QWebEnginePage):
@@ -16,10 +17,10 @@ class ReferencePage(QWebEnginePage):
 
     def acceptNavigationRequest(self, url, kind, main_frame):
         if url.scheme() not in ('http', 'https', 'about'):
-            self.viewer.status.setText('This link cannot be opened as documentation.')
+            self.viewer.status.setText(tr('This link cannot be opened as documentation.'))
             return False
         if url.scheme() != 'about' and not self.viewer.allowed_reference(url):
-            self.viewer.status.setText('This link is outside the documentation sources supported by Atlas.')
+            self.viewer.status.setText(tr('This link is outside the documentation sources supported by Atlas.'))
             return False
         if main_frame and (self.popup or url.path().lower().endswith('.pdf')):
             QTimer.singleShot(0, lambda u=QUrl(url): self.viewer.open(u))
@@ -33,6 +34,7 @@ class ReferencePage(QWebEnginePage):
 
 
 class DocumentViewer(QWidget):
+    navigation_changed = Signal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.reply = None
@@ -42,19 +44,31 @@ class DocumentViewer(QWidget):
         self.initial_origin = None
         layout = QVBoxLayout(self)
         row = QHBoxLayout()
-        self.back_button = QPushButton('Back')
-        self.forward_button = QPushButton('Forward')
+        self.back_button = QPushButton(tr('Back'))
+        self.forward_button = QPushButton(tr('Forward'))
         self.back_button.clicked.connect(lambda: self.move(-1))
         self.forward_button.clicked.connect(lambda: self.move(1))
+        for button, icon in ((self.back_button,QStyle.SP_ArrowBack),(self.forward_button,QStyle.SP_ArrowForward)):
+            button.setToolTip(button.text());button.setText('')
+            button.setIcon(self.style().standardIcon(icon));button.setFixedWidth(32)
         row.addWidget(self.back_button)
         row.addWidget(self.forward_button)
         self.page_number = QSpinBox()
-        self.page_number.setPrefix('Page ')
+        self.page_number.setPrefix(tr('Page '))
         self.page_number.setMinimum(1)
         self.page_number.valueChanged.connect(lambda page: self.pdf_view.pageNavigator().jump(page - 1, QPointF()))
+        self.previous_page = QPushButton('‹')
+        self.next_page = QPushButton('›')
+        self.previous_page.setToolTip(tr('Previous page'))
+        self.next_page.setToolTip(tr('Next page'))
+        self.previous_page.setFixedWidth(30);self.next_page.setFixedWidth(30)
+        self.previous_page.clicked.connect(lambda:self.page_number.setValue(self.page_number.value()-1))
+        self.next_page.clicked.connect(lambda:self.page_number.setValue(self.page_number.value()+1))
+        row.addWidget(self.previous_page)
         row.addWidget(self.page_number)
+        row.addWidget(self.next_page)
         self.zoom = QComboBox()
-        self.zoom.addItems(['Fit width', 'Fit page', '100%', '150%', '200%'])
+        self.zoom.addItems([tr('Fit width'), tr('Fit page'), '100%', '150%', '200%'])
         self.zoom.currentIndexChanged.connect(self.set_zoom)
         row.addWidget(self.zoom)
         row.addStretch()
@@ -70,7 +84,7 @@ class DocumentViewer(QWidget):
         self.web = QWebEngineView()
         self.web.setPage(ReferencePage(self))
         self.web.urlChanged.connect(self.remember)
-        self.web.loadFinished.connect(lambda ok: self.status.setText(self.web.url().toString() if ok else 'Document page could not be loaded.'))
+        self.web.loadFinished.connect(lambda ok: self.status.setText((self.web.url().toString() if ok else tr('Document page could not be loaded.'))))
         self.stack.addWidget(self.web)
         self.pdf = QPdfDocument(self)
         self.pdf_view = QPdfView()
@@ -80,11 +94,21 @@ class DocumentViewer(QWidget):
         self.pdf.statusChanged.connect(self.pdf_status)
         self.pdf_view.pageNavigator().currentPageChanged.connect(self.current_page)
         self.stack.addWidget(self.pdf_view)
+        self.stack.currentChanged.connect(self.update_page_buttons)
+        self.page_number.valueChanged.connect(self.update_page_buttons)
+        self.update_page_buttons()
+
+    def update_page_buttons(self, *_):
+        ready = self.stack.currentWidget() is self.pdf_view and self.pdf.pageCount() > 0
+        self.page_number.setEnabled(ready);self.zoom.setEnabled(ready)
+        self.previous_page.setEnabled(ready and self.page_number.value()>1)
+        self.next_page.setEnabled(ready and self.page_number.value()<self.pdf.pageCount())
 
     def current_page(self, page):
         self.page_number.blockSignals(True)
         self.page_number.setValue(page + 1)
         self.page_number.blockSignals(False)
+        self.update_page_buttons()
 
     def set_zoom(self, index):
         if index < 2:
@@ -101,6 +125,7 @@ class DocumentViewer(QWidget):
             self.position = len(self.urls) - 1
         self.back_button.setEnabled(self.position > 0)
         self.forward_button.setEnabled(self.position + 1 < len(self.urls))
+        self.navigation_changed.emit()
 
     def move(self, delta):
         position = self.position + delta
@@ -118,13 +143,13 @@ class DocumentViewer(QWidget):
     def open(self, url, force_pdf=False):
         url = QUrl(url)
         if url.scheme() not in ('http', 'https', 'file'):
-            self.status.setText('Unsupported document address.')
+            self.status.setText(tr('Unsupported document address.'))
             return
         if not url.isLocalFile():
             if self.initial_origin is None:
                 self.initial_origin = (url.scheme(), url.host().lower(), url.port())
             if not self.allowed_reference(url):
-                self.status.setText('This link is outside the documentation sources supported by Atlas.')
+                self.status.setText(tr('This link is outside the documentation sources supported by Atlas.'))
                 return
         self.cancel()
         self.web.stop()
@@ -133,11 +158,11 @@ class DocumentViewer(QWidget):
         is_pdf = force_pdf or url.path().lower().endswith('.pdf')
         self.page_number.setVisible(is_pdf)
         self.zoom.setVisible(is_pdf)
-        self.status.setText('Opening document…')
+        self.status.setText(tr('Opening document…'))
         self.stack.setCurrentWidget(self.pdf_view if is_pdf else self.web)
         if not is_pdf:
             if url.isLocalFile():
-                self.status.setText('Only PDF files are supported for local documents.')
+                self.status.setText(tr('Only PDF files are supported for local documents.'))
                 return
             self.web.setUrl(url)
             return
@@ -163,7 +188,7 @@ class DocumentViewer(QWidget):
         self.data.extend(bytes(self.reply.readAll()))
         if len(self.data) > 64 * 1024 * 1024:
             self.reply.abort()
-            self.status.setText('Document exceeds the 64 MB viewer limit.')
+            self.status.setText(tr('Document exceeds the 64 MB viewer limit.'))
 
     def pdf_received(self):
         if not self.reply:
@@ -171,7 +196,7 @@ class DocumentViewer(QWidget):
         self.read_pdf()
         reply, self.reply = self.reply, None
         if reply.error() != QNetworkReply.NoError or not self.data.startswith(b'%PDF-'):
-            self.status.setText('PDF could not be loaded. Check the official document address or use a downloaded copy.')
+            self.status.setText(tr('PDF could not be loaded. Check the official document address or use a downloaded copy.'))
         else:
             self.buffer = QBuffer(self)
             self.buffer.setData(bytes(self.data))
@@ -184,9 +209,10 @@ class DocumentViewer(QWidget):
         if status == QPdfDocument.Status.Ready:
             self.page_number.setMaximum(max(1, self.pdf.pageCount()))
             self.page_number.setValue(1)
-            self.status.setText(f'{self.pdf.pageCount()} pages · {self.property("document_url")}')
+            self.update_page_buttons()
+            self.status.setText(tr('{v0} pages · {v1}', v0=self.pdf.pageCount(), v1=self.property('document_url')))
         elif status == QPdfDocument.Status.Error:
-            self.status.setText('PDF could not be opened. It may be damaged or password protected.')
+            self.status.setText(tr('PDF could not be opened. It may be damaged or password protected.'))
 
     def download_requested(self, download):
         url, mime = download.url(), download.mimeType()
@@ -194,7 +220,7 @@ class DocumentViewer(QWidget):
         if mime == 'application/pdf' or url.path().lower().endswith('.pdf'):
             QTimer.singleShot(0, lambda: self.open(url, force_pdf=True))
         else:
-            self.status.setText('Use the Library download button to save firmware or software files.')
+            self.status.setText(tr('Use the Library download button to save firmware or software files.'))
 
     def cancel(self):
         if self.reply:
