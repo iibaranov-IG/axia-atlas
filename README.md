@@ -16,7 +16,7 @@ Free, independent Windows software for broadcast engineers working with Axia Liv
 - Keeps local shift schedules, leave and replacements.
 - Supports user permissions and reusable encrypted device credential profiles.
 - Offers optional local speech transcription and an advisory Virtual Engineer.
-- Opens ATLAS Broadcast Player as a separate application module with its own library and process.
+- Opens ATLAS Broadcast Player as a separate application module with its own library and process. Player development is [frozen at preview.2](BROADCAST_PLAYER_FREEZE.md); this does not freeze the main Atlas application.
 
 Network discovery, monitoring and device commands start only through explicit user actions. Fresh installations contain no station inventory, staff records, saved credentials or private knowledge base. Existing workstation data remains in the same per-user directory.
 

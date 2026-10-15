@@ -1,5 +1,18 @@
 # ATLAS Broadcast Player
 
+## Development frozen — 2026-10-15
+
+Version `0.1.0-preview.2` is frozen at the owner's request. Preserve this module
+as a local rehearsal preview; resume development only after a new explicit
+owner decision. The delivery sequence below is retained as a deferred backlog,
+not an active implementation plan. This freeze applies only to Broadcast Player;
+the main Axia Atlas project remains active.
+
+Source snapshot tag: `broadcast-player-v0.1.0-preview.2-frozen`.
+See [freeze record and verification](BROADCAST_PLAYER_FREEZE.md) and
+[source checksums](BROADCAST_PLAYER_FREEZE.json). This snapshot does not qualify
+the player for unattended on-air operation and does not introduce a new binary.
+
 ## Implemented preview — 2026-10-13
 
 Independent Windows desktop application, version `0.1.0-preview.2`. The Atlas

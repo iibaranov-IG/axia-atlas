@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "product": "ATLAS Broadcast Player",
+  "version": "0.1.0-preview.2",
+  "status": "development_frozen",
+  "frozen_on": "2026-10-15",
+  "tag": "broadcast-player-v0.1.0-preview.2-frozen",
+  "source_base_commit": "39d73f3c85bf23ab11456aa015316d3fe4383d78",
+  "scope": "Source snapshot; no new standalone binary release; main Axia Atlas remains active.",
+  "resume_policy": "Resume player development only after a new explicit owner decision.",
+  "source_unchanged_since_base_commit": true,
+  "source_checksum_basis": "SHA-256 of Git blob bytes (LF text), not platform-dependent checkout line endings.",
+  "source_sha256": {
+    "broadcast_player/__init__.py": "cb060ee5da4a3bba3a34ee16203e792c722cb382276559dbdc09e9b345d548f3",
+    "broadcast_player/__main__.py": "43ee187393e3cd08543111a92eb75bb91c7f1bbc0d868bb5ffc7d7c2e4b281ac",
+    "broadcast_player/deck.py": "b99d217098df087d4cb3d4a980bb2f222d33e30ae1bb09b6f1ccbfefa69f14dd",
+    "broadcast_player/launcher.py": "cdc213e19e7ca129d527b3761cca43ab48413a9df19700dd62eb30bddec5d969",
+    "broadcast_player/media.py": "a763571a1f31dd323b9b980f753078d40062dd1cc383e7213a19afa6c286e9b9",
+    "broadcast_player/pcm.py": "b886d33d55c878a2d91beed18e408934822120bdc9f43c35e319e89fc4fe9909",
+    "broadcast_player/playout.py": "65e68ab97e3679fa7b63875fe79c1d4491143c14948f1790629c00a2842c98c1",
+    "broadcast_player/store.py": "3b264e40715d5759bf9e2b31335e059c7365c0a54c720fdbc9f49fed41cf21c6",
+    "broadcast_player/window.py": "6ae02727c21048264980bd7d3f769f985969ad49bcd48531cdd74a3dd84c6971",
+    "requirements-player.txt": "9a5552566b71d7b1e67c4640ade77c34df48b747c2977dbb2cd88847a664c6ac",
+    "run_broadcast_player.py": "4d1bdc25afd82607f82e155333405bea37dc4e10e414826e27a97975ae3e2de5",
+    "test_broadcast_player.py": "ff6625c7464573871584cbcda46b9ca01e9e20e60998c23922b5b2a208f2f90e",
+    "test_broadcast_player_integration.py": "ae0403c4f58ec8ce2a66d2420642e5b8ca21281d09b357a3f7efa449422bc651",
+    "test_broadcast_player_transitions.py": "ac929c72fa5e2ae845ea5bfd7d07685616b7bdd78db497d854f6ef257efc4c4e",
+    "tooling/build_player.py": "970107f1ca3dfb5aaa42ea5a5ed86fc1f4c8268a34b3d04622128b4d997a2f29"
+  },
+  "verification": {
+    "python": "3.11.9",
+    "dependencies": {
+      "PySide6": "6.8.3",
+      "numpy": "2.2.6",
+      "av": "18.1.0",
+      "lameenc": "1.8.4"
+    },
+    "tests": [
+      {
+        "module": "test_broadcast_player",
+        "exit_code": 0,
+        "tests": 12,
+        "skipped": 0
+      },
+      {
+        "module": "test_broadcast_player_integration",
+        "exit_code": 0,
+        "tests": 2,
+        "skipped": 0
+      },
+      {
+        "module": "test_broadcast_player_transitions",
+        "exit_code": 0,
+        "tests": 13,
+        "skipped": 0
+      }
+    ],
+    "total_tests": 27,
+    "skipped_tests": 0,
+    "all_passed": true,
+    "isolated_catalogues": true,
+    "synthetic_media": true,
+    "physical_station_devices_contacted": false,
+    "transition_measurement": {
+      "output": "Windows RDP audio output (muted)",
+      "rate": 44100,
+      "frames": 111662,
+      "duration_seconds": 2.532018140589569,
+      "crossfade_ms": 500,
+      "output_instances": 1,
+      "max_sample_error": 0.0,
+      "capture_point": "PCM accepted by QAudioSink, before muted output volume",
+      "acoustic_output_verified": false
+    }
+  },
+  "known_limits": [
+    "Not qualified for unattended 24/7 on-air playout.",
+    "Physical acoustic output and long-duration operation remain unverified.",
+    "Scheduler, relay/reserve, archive recording, AES67 TX, Internet publishing and remote API are not implemented.",
+    "No new packaged-binary acceptance was performed for this source freeze."
+  ]
+}
