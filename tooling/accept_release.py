@@ -23,8 +23,8 @@ def accept(executable, output):
     env.pop('PYTHONHOME', None)
     windows = Path(os.environ['SystemRoot'])
     env['PATH'] = str(windows / 'System32') + ';' + str(windows)
-    subprocess.run([str(executable), '--self-test', str(output)], cwd=ROOT, env=env,
-                   timeout=60, check=True, creationflags=subprocess.CREATE_NO_WINDOW)
+    subprocess.run([str(executable), '--self-test', str(output)], cwd=executable.parent, env=env,
+                   timeout=150, check=True, creationflags=subprocess.CREATE_NO_WINDOW)
     report = json.loads(report_path.read_text(encoding='utf-8'))
     if not (report.get('passed') and report.get('frozen')):
         raise ValueError('Frozen acceptance failed')

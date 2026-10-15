@@ -21,6 +21,12 @@ def build():
                '--workpath', str(ROOT/'build'/'release-candidate'),
                '--specpath', str(ROOT/'build'),
                '--add-data', str(ROOT/'translations') + ';translations']
+    # Atlas uses QWidget-based PDF, browser and audio views. The QML UI
+    # modules otherwise pull thousands of unused assets into the portable ZIP,
+    # including paths that Windows Explorer cannot extract in ordinary folders.
+    # PyInstaller still collects native DLL dependencies of the retained modules.
+    for module in ('PySide6.QtQml', 'PySide6.QtQuick', 'PySide6.QtQuickWidgets'):
+        command += ['--exclude-module', module]
     for package in ('soxr', 'lameenc', 'faster_whisper', 'ctranslate2', 'tokenizers'):
         command += ['--collect-all', package]
     subprocess.run(command + [str(ROOT/'main.py')], cwd=ROOT, check=True)

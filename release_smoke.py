@@ -115,6 +115,8 @@ def run(app, output):
         encoded = encoder.encode(bytes(4800 * 4)) + encoder.flush()
         assert len(encoded) > 0
         checks['resampling_and_mp3'] = True
+        from release_workflows import run as verify_workflows
+        checks.update(verify_workflows(app, root, output))
         code = 0
     except Exception:
         (output / 'failure.txt').write_text(traceback.format_exc(), encoding='utf-8')

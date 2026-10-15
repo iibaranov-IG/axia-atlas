@@ -1,9 +1,8 @@
 {
   "version": "0.2.0-rc.1",
-  "checked_at": "2026-10-15T07:45:19.968570+00:00",
-  "platform": "Windows-10-10.0.19045-SP0",
-  "core_tests": 92,
-  "existing_player_module_regression_tests": 27,
+  "checked_at": "2026-10-15T08:25:05.971963+00:00",
+  "platform": "Windows 10 x64, existing engineering workstation",
+  "core_tests": 94,
   "failed": 0,
   "skipped": 0,
   "frozen_executable": {
@@ -19,31 +18,77 @@
       "speech_recognition_runtime": true,
       "transcription_worker_reports_missing_input": true,
       "webengine": true,
-      "resampling_and_mp3": true
+      "resampling_and_mp3": true,
+      "workspace_navigation": true,
+      "audio_selection_without_playback": true,
+      "restart_preserves_cards_scenarios_favorites_language_skin": true,
+      "transcription_button_to_text": true
     },
-    "executable_sha256": "1e5aa4e883d3180bcb351ae829a06b3af15668f732b66e31106f9cdcfc894160"
+    "executable_sha256": "8c307e1c32051a358b6919fcd40f86dc0f511ee48e1050262a3180cccb23fcfc"
   },
   "python_removed_from_path": true,
-  "packaged_russian_transcription": {
-    "passed": true,
-    "expected_phrase": "резервный источник звука",
-    "observed_text": "Добрый день! Дежурный инженер проверяет резервный источник звука. Запись готова к расшифровке.",
-    "executable_sha256": "1e5aa4e883d3180bcb351ae829a06b3af15668f732b66e31106f9cdcfc894160"
+  "receiver_test_scope": "Actual source AudioReceiver + WAV/MP3 recorders, 127.0.0.1 multicast interface, TTL=0; no physical audio output",
+  "audio_sustained": {
+    "seconds": 180,
+    "sent": 720000,
+    "received": 720000,
+    "injected_missing": 0,
+    "reported_missing": 0,
+    "late": 0,
+    "invalid": 0,
+    "foreign": 0,
+    "overflows": 0,
+    "receiver_error": "",
+    "wav_error": "",
+    "mp3_error": "",
+    "wav_frames": 8640000,
+    "pcm_sha256": "7c58971ac4193d964a091b7303a91546f5f69bfc79d0a3c41f2a3bd00a682329",
+    "expected_pcm_sha256": "7c58971ac4193d964a091b7303a91546f5f69bfc79d0a3c41f2a3bd00a682329",
+    "mp3_frequencies_hz": [
+      997.0,
+      1499.0
+    ],
+    "passed": true
+  },
+  "audio_injected_loss": {
+    "seconds": 10,
+    "sent": 39601,
+    "received": 39601,
+    "injected_missing": 399,
+    "reported_missing": 399,
+    "late": 0,
+    "invalid": 0,
+    "foreign": 0,
+    "overflows": 0,
+    "receiver_error": "",
+    "wav_error": "",
+    "mp3_error": "",
+    "wav_frames": 480000,
+    "pcm_sha256": "20905944496c84254ee989180d340f457a429afb91b15aed25b00a6fb50dfbd6",
+    "expected_pcm_sha256": "20905944496c84254ee989180d340f457a429afb91b15aed25b00a6fb50dfbd6",
+    "mp3_frequencies_hz": [
+      997.0,
+      1499.0
+    ],
+    "passed": true
   },
   "native_window": {
-    "version_title_verified": true,
-    "russian_navigation_verified": true,
-    "duplicate_workspace_rejected": true,
-    "screenshot_capture": "Unavailable: Windows Graphics Capture FrameArrived timeout in the current remote desktop session",
-    "native_pointer_input": "Unavailable: coordinate input geometry is unavailable",
-    "layout": "Qt-rendered Russian workspace inspected; GUI workflow tests passed"
+    "first_launch_russian_administration_observed": true,
+    "screenshot_capture": "FrameArrived timed out in this Windows session",
+    "native_pointer_input": "foreground window did not report a process id",
+    "alternative": "User workflows executed by in-process Qt controls in the actual EXE; Qt-rendered layout inspected"
   },
+  "fixes": [
+    "Unused QML assets exceeded Windows extraction path limits",
+    "Scenario explanation was clipped in the available panel width"
+  ],
+  "archive_acceptance": "Pending final archive re-extraction",
   "production_equipment_contacted": false,
   "remaining": [
-    "Clean Windows installation acceptance",
-    "Physical audio output and long-running network acceptance",
-    "Device compatibility matrix",
+    "Separate clean Windows machine acceptance",
+    "Physical audio output and real network/device compatibility",
+    "Longer than three minutes of continuous audio operation",
     "Code signing and installer",
-    "GitHub publication: stored credentials rejected"
+    "GitHub publication not completed"
   ]
 }

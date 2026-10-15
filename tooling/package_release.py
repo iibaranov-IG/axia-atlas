@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import shutil
 import subprocess
 import zipfile
 from pathlib import Path
@@ -12,8 +13,19 @@ sys.path.insert(0, str(ROOT))
 from app_paths import VERSION
 
 
+def check_portable_paths(build, destination_characters=140):
+    """Reserve space for a normal Windows user folder without LongPathsEnabled."""
+    for path in build.rglob('*'):
+        if not path.is_file():
+            continue
+        relative = str(Path('AxiaAtlas') / path.relative_to(build))
+        if destination_characters + 1 + len(relative) >= 260:
+            raise ValueError('Portable path is too long for Windows extraction: ' + relative)
+
+
 def package(build, acceptance):
     build = build.resolve()
+    check_portable_paths(build)
     report = json.loads((acceptance / 'self-test.json').read_text(encoding='utf-8'))
     if not (report.get('passed') and report.get('frozen') and report.get('version') == VERSION):
         raise ValueError('A passing frozen acceptance report for this version is required.')
@@ -44,6 +56,9 @@ def package(build, acceptance):
     (build / 'BUILD.json').write_text(json.dumps(info, indent=2), encoding='utf-8')
     # Copy acceptance metadata, never raw tests' temporary workstation content.
     (build / 'ACCEPTANCE.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+    for name in ('VALIDATION.json', 'ACCEPTANCE.ru.md'):
+        if (ROOT / name).is_file():
+            shutil.copy2(ROOT / name, build / name)
     archive = build.parent / ('AxiaAtlas-' + VERSION + '-windows-x64.zip')
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as output:
         for path in sorted(build.rglob('*')):

@@ -14,6 +14,10 @@ Fresh installations no longer receive an embedded studio map or station referenc
 
 Acceptance results for this exact candidate are recorded in VALIDATION.json. Tests use synthetic data and loopback services. No production radio equipment is contacted by the acceptance suite.
 
+Acceptance found and fixed a Windows extraction failure caused by unused QML assets with long filenames. The build now excludes those UI modules while retaining the QWidget browser/PDF and native runtime dependencies. Packaging checks a 140-character destination-folder budget. The scenario explanation also wraps within the available panel width.
+
+The packaged self-test now checks workspace navigation, source filtering, equipment/scenario/favorite persistence, Russian/English restart behavior and visual-style persistence. With explicit local speech fixtures it also presses the transcription control and verifies the recognized phrase. The separate host-only multicast harness measures packet accounting, bit-exact WAV output and independently decoded MP3 channels.
+
 ## Known limits
 
 - This is an unsigned portable Windows x64 candidate, not an installer or an on-air certification.

@@ -183,7 +183,9 @@ class ScenariosPanel(QWidget):
         self.draft_path = atlas.data_dir / 'state' / 'scenario-draft.json'
         self.restoring = True
         layout = QVBoxLayout(self)
-        layout.addWidget(QLabel(tr('Scenarios · saved on this computer · routing changes require preflight and an authorized target')))
+        explanation = QLabel(tr('Scenarios · saved on this computer · routing changes require preflight and an authorized target'))
+        explanation.setWordWrap(True)
+        layout.addWidget(explanation)
         self.saved = QComboBox()
         layout.addWidget(self.saved)
         self.name = QLineEdit()
