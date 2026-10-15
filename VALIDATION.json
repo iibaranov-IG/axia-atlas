@@ -1,6 +1,6 @@
 {
   "version": "0.2.0-rc.1",
-  "checked_at": "2026-10-15T08:25:05.971963+00:00",
+  "checked_at": "2026-10-15T08:29:40.941998+00:00",
   "platform": "Windows 10 x64, existing engineering workstation",
   "core_tests": 94,
   "failed": 0,
@@ -82,7 +82,36 @@
     "Unused QML assets exceeded Windows extraction path limits",
     "Scenario explanation was clipped in the available panel width"
   ],
-  "archive_acceptance": "Pending final archive re-extraction",
+  "archive_acceptance": {
+    "passed": true,
+    "files": 691,
+    "destination_characters": 126,
+    "maximum_file_path_characters": 242,
+    "executable_sha256": "8c307e1c32051a358b6919fcd40f86dc0f511ee48e1050262a3180cccb23fcfc",
+    "extracted_executable_runtime": {
+      "version": "0.2.0-rc.1",
+      "frozen": true,
+      "passed": true,
+      "checks": {
+        "desktop": true,
+        "dpapi_and_https_accounts": true,
+        "pdf": true,
+        "manual_knowledge": true,
+        "clean_russian_first_run": true,
+        "speech_recognition_runtime": true,
+        "transcription_worker_reports_missing_input": true,
+        "webengine": true,
+        "resampling_and_mp3": true,
+        "workspace_navigation": true,
+        "audio_selection_without_playback": true,
+        "restart_preserves_cards_scenarios_favorites_language_skin": true,
+        "transcription_button_to_text": true
+      },
+      "executable_sha256": "8c307e1c32051a358b6919fcd40f86dc0f511ee48e1050262a3180cccb23fcfc"
+    },
+    "working_directory": "Extracted executable folder, outside the source tree root",
+    "archive_digest_location": "Adjacent .sha256 file; archive is resealed when this report is included"
+  },
   "production_equipment_contacted": false,
   "remaining": [
     "Separate clean Windows machine acceptance",
