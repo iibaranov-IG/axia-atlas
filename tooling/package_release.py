@@ -17,6 +17,10 @@ def package(build, acceptance):
     report = json.loads((acceptance / 'self-test.json').read_text(encoding='utf-8'))
     if not (report.get('passed') and report.get('frozen') and report.get('version') == VERSION):
         raise ValueError('A passing frozen acceptance report for this version is required.')
+    with (build / 'AxiaAtlas.exe').open('rb') as executable:
+        actual_hash = hashlib.file_digest(executable, 'sha256').hexdigest()
+    if report.get('executable_sha256') != actual_hash:
+        raise ValueError('The executable differs from the accepted executable.')
     tests = json.loads((ROOT / 'state/isolated-tests/summary.json').read_text(encoding='utf-8'))
     if not tests or any(row['exit_code'] != 0 for row in tests):
         raise ValueError('The source acceptance suite has not passed.')
@@ -29,7 +33,9 @@ def package(build, acceptance):
     forbidden = {'station_data.json', 'station-reference.json', 'site_device_groups.json',
                  'inventory.json', 'layout.ini'}
     for path in build.rglob('*'):
-        if path.is_file() and (path.name in forbidden or path.suffix in {'.sqlite', '.sqlite3', '.db', '.pem'}):
+        public_ca_bundle = path.relative_to(build).as_posix() == '_internal/certifi/cacert.pem'
+        if path.is_file() and (path.name in forbidden or path.suffix in {'.sqlite', '.sqlite3', '.db'}
+                              or (path.suffix == '.pem' and not public_ca_bundle)):
             raise ValueError('Workstation data found in distribution: ' + str(path))
     info['build_base_commit'] = info['source_commit']
     info['source_commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
@@ -46,7 +52,8 @@ def package(build, acceptance):
     with zipfile.ZipFile(archive) as output:
         if output.testzip() is not None:
             raise ValueError('ZIP verification failed')
-    digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+    with archive.open('rb') as stream:
+        digest = hashlib.file_digest(stream, 'sha256').hexdigest()
     archive.with_suffix('.sha256').write_text(digest + '  ' + archive.name + '\n', encoding='ascii')
     print(json.dumps(dict(archive=str(archive), sha256=digest, bytes=archive.stat().st_size), indent=2))
 

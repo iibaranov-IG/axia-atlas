@@ -20,13 +20,15 @@
       "transcription_worker_reports_missing_input": true,
       "webengine": true,
       "resampling_and_mp3": true
-    }
+    },
+    "executable_sha256": "1e5aa4e883d3180bcb351ae829a06b3af15668f732b66e31106f9cdcfc894160"
   },
   "python_removed_from_path": true,
   "packaged_russian_transcription": {
     "passed": true,
     "expected_phrase": "резервный источник звука",
-    "observed_text": "Добрый день! Дежурный инженер проверяет резервный источник звука. Запись готова к расшифровке."
+    "observed_text": "Добрый день! Дежурный инженер проверяет резервный источник звука. Запись готова к расшифровке.",
+    "executable_sha256": "1e5aa4e883d3180bcb351ae829a06b3af15668f732b66e31106f9cdcfc894160"
   },
   "native_window": {
     "version_title_verified": true,

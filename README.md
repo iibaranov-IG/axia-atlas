@@ -33,9 +33,9 @@ Windows x64 and Python 3.11 are used for this candidate. Install requirements-bu
 ~~~powershell
 python tooling/run_desktop_tests.py
 python build_windows.py
-dist/release-candidate/AxiaAtlas/AxiaAtlas.exe --self-test state/frozen-acceptance
+python tooling/accept_release.py
 ~~~
 
-The build includes its source hashes and dependency notices. Release acceptance must use the packaged executable, not just the source tests. See RELEASE_NOTES.md for measured results and remaining gaps.
+The build includes its source hashes and dependency notices. Release acceptance must use the packaged executable, not just the source tests. After committing the reviewed release files, `python tooling/package_release.py` verifies that source hashes and the accepted EXE still match, then creates the ZIP and SHA-256 file. See RELEASE_NOTES.md for measured results and remaining gaps.
 
 Original Atlas source is MIT licensed. Dependency notices and vendor document rights remain separate: see THIRD_PARTY.md.
